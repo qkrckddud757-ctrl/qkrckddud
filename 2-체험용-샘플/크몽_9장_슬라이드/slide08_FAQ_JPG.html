@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>슬라이드 08 — FAQ</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#080808;font-family:'Noto Sans KR','Segoe UI',sans-serif;width:1080px;}
+.slide{padding:60px 60px;display:flex;flex-direction:column;align-items:center;}
+.label{font-size:12px;font-weight:900;letter-spacing:4px;color:#06b6d4;margin-bottom:16px;}
+.title{font-size:38px;font-weight:900;color:white;text-align:center;line-height:1.3;margin-bottom:10px;}
+.sub{font-size:14px;color:#666;text-align:center;margin-bottom:40px;}
+.faq-list{width:100%;max-width:900px;display:flex;flex-direction:column;gap:10px;margin-bottom:28px;}
+.faq-item{background:#0f0f0f;border-radius:12px;padding:22px 28px;border:1px solid #1a1a1a;}
+.faq-q{font-size:15px;font-weight:800;color:#06b6d4;margin-bottom:12px;display:flex;align-items:flex-start;gap:10px;line-height:1.4;}
+.faq-q::before{content:'Q';background:linear-gradient(135deg,#06b6d4,#6366f1);color:white;font-size:11px;font-weight:900;padding:3px 7px;border-radius:5px;flex-shrink:0;margin-top:1px;}
+.faq-a{font-size:13px;color:#aaa;line-height:1.9;padding-left:32px;}
+.faq-a strong{color:#06b6d4;}
+.faq-hl{background:#06b6d418;border-left:3px solid #06b6d4;border-radius:0 6px 6px 0;padding:8px 14px;margin-top:10px;font-size:12px;color:#7dd3fc;}
+.guarantee{background:#001a11;border:2px solid #00cc6633;border-radius:14px;padding:26px 36px;width:100%;max-width:900px;display:flex;align-items:center;gap:24px;margin-bottom:20px;}
+.g-icon{font-size:44px;flex-shrink:0;}
+.g-text h3{font-size:18px;font-weight:800;color:#00cc66;margin-bottom:8px;}
+.g-text p{font-size:13px;color:#888;line-height:1.7;}
+.refund{background:#0a0a0a;border:1px solid #1a1a1a;border-radius:12px;padding:20px 28px;width:100%;max-width:900px;}
+.refund-title{font-size:11px;font-weight:900;color:#444;letter-spacing:2px;margin-bottom:12px;}
+.refund-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.refund-item{font-size:11px;color:#555;line-height:1.6;padding-left:10px;position:relative;}
+.refund-item::before{content:'•';position:absolute;left:0;color:#333;}
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="label">❓ 구매 전 이런 걱정 있으셨나요?</div>
+  <div class="title">솔직하게 답변드립니다</div>
+  <div class="sub">구매자 219명 리뷰에서 가장 많이 나온 걱정들을 직접 답합니다</div>
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-q">"강의팔이 아닐까요? 이론만 가득한 거 아닌가요?"</div>
+      <div class="faq-a">219명 리뷰 중 압도적으로 많은 표현이 <strong>"실전에 바로 적용 가능"</strong>입니다. 3년간 헬스장 현장에서 직접 검증한 공식만 담았습니다.
+        <div class="faq-hl">💬 "읽고 나니 실무현장에서 바로 적용 가능한 알짜배기들이 들어있더라구요" — 실제 구매자</div>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">"초보 트레이너도 따라 할 수 있나요?"</div>
+      <div class="faq-a">네. 실제 구매자의 <strong>70% 이상이 월 매출 500만원 이하 초보 트레이너</strong>였습니다. 단계별로 따라 할 수 있도록 구성했습니다. <strong>평균 3개월 내 2~3배 매출 성장</strong>을 경험했습니다.
+        <div class="faq-hl">💬 "3개월 만에 다음 달 매출 스트레스와 걱정이 사라졌습니다" — 정환인선생님</div>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">"AI를 잘 몰라도 괜찮을까요?"</div>
+      <div class="faq-a">네, 전혀 몰라도 됩니다. 저자가 수백만원을 직접 투자해 검증한 <strong>트레이너 특화 AI 메타프롬프트</strong>를 그대로 복붙해서 쓸 수 있도록 담았습니다. AI 지식 제로여도 바로 적용 가능합니다.
+        <div class="faq-hl">🤖 AI 메타프롬프트 복붙 즉시 사용 가능 수록</div>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">"구매 후 지원은 받을 수 있나요?"</div>
+      <div class="faq-a">후기 작성 시 <strong>케이스별 해결 테크닉 영상 + 제로코치 세일즈북 + PT회원 관리파일 + 오픈채팅방 커뮤니티</strong>에 초대해드립니다.
+        <div class="faq-hl">🎁 후기 특전만으로도 구매 금액 이상의 가치</div>
+      </div>
+    </div>
+  </div>
+  <div class="guarantee">
+    <div class="g-icon">🛡️</div>
+    <div class="g-text">
+      <h3>1:1 완전 지원 보장</h3>
+      <p>구매 후 적용이 어려운 부분은 직접 1:1로 피드백 드립니다.<br>혼자 막혀서 포기하는 일 없도록 끝까지 함께합니다.<br>평균 응답 3시간 이내 · 24시간 연락 가능</p>
+    </div>
+  </div>
+  <div class="refund">
+    <div class="refund-title">📋 구매 전 확인사항</div>
+    <div class="refund-grid">
+      <div class="refund-item">전자책 특성상 다운로드 후 환불이 어렵습니다.</div>
+      <div class="refund-item">크몽 플랫폼 소비자분쟁해결기준을 따릅니다.</div>
+      <div class="refund-item">적용 어려운 부분은 1:1 피드백으로 지원합니다.</div>
+      <div class="refund-item">평균 응답 3시간 이내 · 24시간 연락 가능합니다.</div>
+      <div class="refund-item">후기 특전은 후기 작성 확인 후 제공됩니다.</div>
+      <div class="refund-item">콘텐츠 미흡 시 크몽 CS팀에 문의 가능합니다.</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

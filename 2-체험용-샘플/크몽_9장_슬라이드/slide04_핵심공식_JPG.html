@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>슬라이드 04 — 핵심 공식</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:linear-gradient(180deg,#080808 0%,#0a0a16 100%);font-family:'Noto Sans KR','Segoe UI',sans-serif;width:1080px;}
+.slide{padding:60px 60px;display:flex;flex-direction:column;align-items:center;}
+.label{font-size:12px;font-weight:900;letter-spacing:4px;background:linear-gradient(90deg,#6366f1,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:16px;}
+.title{font-size:40px;font-weight:900;color:white;text-align:center;line-height:1.3;margin-bottom:10px;}
+.sub{font-size:15px;color:#666;text-align:center;margin-bottom:40px;}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;width:100%;max-width:920px;margin-bottom:20px;}
+.card{background:#0f0f1a;border:1px solid #6366f122;border-radius:14px;padding:24px 22px;}
+.card-num{font-size:10px;font-weight:900;letter-spacing:3px;color:#6366f1;margin-bottom:10px;}
+.card-icon{font-size:28px;margin-bottom:10px;display:block;}
+.card-title{font-size:16px;font-weight:800;color:white;margin-bottom:8px;line-height:1.4;}
+.card-desc{font-size:12px;color:#777;line-height:1.8;}
+.card-result{margin-top:12px;background:#6366f118;border-radius:6px;padding:7px 12px;font-size:11px;color:#a5b4fc;font-weight:700;}
+.ai-section{background:linear-gradient(135deg,#0a0a1a,#1a0a1a);border:2px solid #6366f144;border-radius:16px;padding:30px 36px;width:100%;max-width:920px;position:relative;overflow:hidden;}
+.ai-section::before{content:'🤖 AI 독점 콘텐츠 포함';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,#6366f1,#ec4899);color:white;font-size:11px;font-weight:900;padding:4px 20px;border-radius:20px;white-space:nowrap;}
+.ai-title{font-size:22px;font-weight:900;color:white;margin-bottom:8px;text-align:center;}
+.ai-subtitle{font-size:13px;color:#888;text-align:center;margin-bottom:20px;line-height:1.6;}
+.ai-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.ai-item{background:#ffffff06;border-radius:10px;padding:14px;text-align:center;}
+.ai-icon{font-size:24px;margin-bottom:8px;}
+.ai-label{font-size:12px;font-weight:700;color:#c4b5fd;margin-bottom:4px;}
+.ai-desc{font-size:11px;color:#666;line-height:1.5;}
+.ai-badge{margin-top:16px;background:#6366f122;border:1px solid #6366f144;border-radius:8px;padding:10px 16px;font-size:12px;color:#a5b4fc;text-align:center;line-height:1.6;}
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="label">💎 이 책 한 권으로 얻는 것</div>
+  <div class="title">5가지 핵심 공식</div>
+  <div class="sub">수백만원짜리 오프라인 세미나 + AI 강의에서도 못 들은 현장 공식</div>
+  <div class="grid">
+    <div class="card">
+      <div class="card-num">BENEFIT 01</div>
+      <span class="card-icon">🎯</span>
+      <div class="card-title">OT 등록률 80%+<br>진짜 질문법</div>
+      <div class="card-desc">말주변 없어도 OK. 고객 마음을 먼저 읽고 자연스럽게 니즈를 이끌어내는 현장 검증 질문법. 더 이상 거절이 두렵지 않습니다.</div>
+      <div class="card-result">✓ 실구매자 OT 등록률 평균 80%+ 달성</div>
+    </div>
+    <div class="card">
+      <div class="card-num">BENEFIT 02</div>
+      <span class="card-icon">🔄</span>
+      <div class="card-title">SNS 회원 유입<br>자동화 셋팅</div>
+      <div class="card-desc">인스타·당근·다짐 등 한 번 만들어 놓으면 매달 워크인 신규가 알아서 들어오는 구조. AI 활용 마케팅 셋팅법 수록.</div>
+      <div class="card-result">✓ 월 1건 이상 SNS 워크인 신규 유입 목표</div>
+    </div>
+    <div class="card">
+      <div class="card-num">BENEFIT 03</div>
+      <span class="card-icon">🔁</span>
+      <div class="card-title">재등록률 90%<br>유지 루틴 시스템</div>
+      <div class="card-desc">PT 가치를 100% 느끼게 만드는 시각화 자료, 받는 게 많아서 떠나기 아쉬운 구조. 명분 셋팅 하나로 재등록이 자연스러워집니다.</div>
+      <div class="card-result">✓ 시각화 파일·세일즈북 템플릿 제공</div>
+    </div>
+    <div class="card">
+      <div class="card-num">BENEFIT 04</div>
+      <span class="card-icon">📣</span>
+      <div class="card-title">소개·리뷰로<br>경우의 수 극대화</div>
+      <div class="card-desc">씨앗 뿌리기부터 소개 혜택 설계, 리뷰를 등록 도구로 활용하는 방법까지. 한 명의 회원이 여러 명을 데려오는 구조.</div>
+      <div class="card-result">✓ 월 1건 이상 소개 등록 들어오는 구조</div>
+    </div>
+  </div>
+  <div class="ai-section">
+    <div class="ai-title">🤖 수백만원 투자해 검증한 AI 메타프롬프트 공개</div>
+    <div class="ai-subtitle">저자가 수백만원을 써가며 직접 얻고 적용한<br>트레이너 특화 AI 활용법과 브랜딩 마케팅 공식을 이 책에 담았습니다</div>
+    <div class="ai-grid">
+      <div class="ai-item"><div class="ai-icon">✍️</div><div class="ai-label">AI 콘텐츠 제작</div><div class="ai-desc">인스타 피드·릴스·스토리를<br>AI로 10배 빠르게 제작하는<br>메타프롬프트 수록</div></div>
+      <div class="ai-item"><div class="ai-icon">🎙️</div><div class="ai-label">트레이너 브랜딩</div><div class="ai-desc">나만의 브랜드 스토리를<br>AI로 셋팅하고 팔리는<br>퍼스널 브랜드 만드는 법</div></div>
+      <div class="ai-item"><div class="ai-icon">📊</div><div class="ai-label">자동화 마케팅</div><div class="ai-desc">AI + SNS로 워크인 신규가<br>알아서 들어오는 구조를<br>단계별로 셋팅하는 법</div></div>
+    </div>
+    <div class="ai-badge">💡 이 내용만으로도 수백만원짜리 강의의 핵심 — 이 책 한 권에 전부 담겨 있습니다</div>
+  </div>
+</div>
+</body>
+</html>

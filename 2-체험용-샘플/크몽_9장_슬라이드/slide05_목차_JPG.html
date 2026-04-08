@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>슬라이드 05 — 목차</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#080808;font-family:'Noto Sans KR','Segoe UI',sans-serif;width:1080px;}
+.slide{padding:60px 60px;display:flex;flex-direction:column;align-items:center;}
+.label{font-size:12px;font-weight:900;letter-spacing:4px;color:#00cc66;margin-bottom:16px;}
+.title{font-size:38px;font-weight:900;color:white;text-align:center;line-height:1.3;margin-bottom:10px;}
+.sub{font-size:14px;color:#666;text-align:center;margin-bottom:40px;}
+.chapter-list{width:100%;max-width:900px;display:flex;flex-direction:column;gap:10px;margin-bottom:32px;}
+.chapter{background:#0f0f0f;border-radius:12px;padding:20px 24px;display:flex;gap:16px;align-items:flex-start;border:1px solid #1a1a1a;position:relative;overflow:hidden;}
+.chapter::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--c1),var(--c2));}
+.ch-num{font-size:10px;font-weight:900;letter-spacing:2px;padding:3px 8px;border-radius:16px;flex-shrink:0;margin-top:2px;}
+.ch-title{font-size:15px;font-weight:800;color:white;margin-bottom:6px;line-height:1.3;}
+.ch-detail{font-size:12px;color:#666;line-height:1.7;}
+.ch-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
+.ch-tag{font-size:10px;padding:2px 8px;border-radius:10px;background:#ffffff08;color:#888;border:1px solid #ffffff0d;}
+.total{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%;max-width:900px;}
+.total-item{background:#111;border-radius:10px;padding:16px;text-align:center;border-top:2px solid #00cc6633;}
+.total-num{font-size:26px;font-weight:900;color:#00cc66;}
+.total-label{font-size:11px;color:#555;margin-top:3px;}
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="label">📋 전자책 목차 전체 공개</div>
+  <div class="title">103페이지에 담긴<br>매출 자동화 완전 공식</div>
+  <div class="sub">이론이 아닌 3년간 현장 검증한 실전 공식만 담았습니다</div>
+  <div class="chapter-list">
+    <div class="chapter" style="--c1:#ff3b3b;--c2:#ff7b00">
+      <div class="ch-num" style="background:#ff3b3b18;color:#ff7777">INTRO</div>
+      <div><div class="ch-title">당신의 매출을 못하는 가장 큰 이유 — '경우의 수'가 없다</div><div class="ch-detail">매출이 안 오르는 근본 원인을 정확히 진단합니다. 열정·실력이 아니라 시스템의 문제임을 깨닫는 순간, 모든 게 달라집니다.</div></div>
+    </div>
+    <div class="chapter" style="--c1:#6366f1;--c2:#ec4899">
+      <div class="ch-num" style="background:#6366f118;color:#a5b4fc">1장</div>
+      <div><div class="ch-title">신규 OT 등록률 80% 이상 급상승 치트키</div><div class="ch-detail">등록률을 폭발적으로 올리는 "질문법" + 상위 1% 트레이너의 10가지 마인드셋. 말주변 없어도 OK.</div><div class="ch-tags"><span class="ch-tag">질문법</span><span class="ch-tag">마인드셋</span><span class="ch-tag">OT 등록</span></div></div>
+    </div>
+    <div class="chapter" style="--c1:#10b981;--c2:#06b6d4">
+      <div class="ch-num" style="background:#10b98118;color:#6ee7b7">2장</div>
+      <div><div class="ch-title">한 달에 1건 이상 소개 등록이 들어오는 비밀</div><div class="ch-detail">씨앗 뿌리기 작업부터 소개 혜택 기대효과 설계까지. 회원 한 명이 여러 명을 데려오는 자동화 구조.</div><div class="ch-tags"><span class="ch-tag">소개 마케팅</span><span class="ch-tag">혜택 설계</span><span class="ch-tag">자동 유입</span></div></div>
+    </div>
+    <div class="chapter" style="--c1:#f59e0b;--c2:#ef4444">
+      <div class="ch-num" style="background:#f59e0b18;color:#fcd34d">3장</div>
+      <div><div class="ch-title">한 달에 1건 이상 워크인 신규 + AI 브랜딩 마케팅</div><div class="ch-detail">수백만원 투자해 검증한 AI 메타프롬프트 활용법 + 인스타·당근·다짐 SNS 셋팅법 + 리뷰의 정석. 트레이너 브랜딩까지.</div><div class="ch-tags"><span class="ch-tag">AI 메타프롬프트</span><span class="ch-tag">트레이너 브랜딩</span><span class="ch-tag">SNS 자동화</span></div></div>
+    </div>
+    <div class="chapter" style="--c1:#ec4899;--c2:#8b5cf6">
+      <div class="ch-num" style="background:#ec489918;color:#f9a8d4">4장</div>
+      <div><div class="ch-title">OT 산더미처럼 쌓이게 만드는 치트키</div><div class="ch-detail">골반 교정·어깨 교정 등 후킹 키워드 활용 체험 셋팅법. OT가 없다고요? 이제 OT가 넘쳐납니다.</div><div class="ch-tags"><span class="ch-tag">후킹 키워드</span><span class="ch-tag">체험 셋팅</span><span class="ch-tag">OT 극대화</span></div></div>
+    </div>
+    <div class="chapter" style="--c1:#ffd700;--c2:#ff7b00">
+      <div class="ch-num" style="background:#ffd70018;color:#fef08a">5장</div>
+      <div><div class="ch-title">재등록? 명분 셋팅하고 장기 회원 늘리는 법</div><div class="ch-detail">PT 가치 100% 느끼게 만드는 시각화 비밀 + 받는 게 많아서 떠나기 아쉬운 구조. 재등록률 90% 유지 시스템.</div><div class="ch-tags"><span class="ch-tag">재등록 전략</span><span class="ch-tag">시각화 자료</span><span class="ch-tag">장기 회원</span></div></div>
+    </div>
+  </div>
+  <div class="total">
+    <div class="total-item"><div class="total-num">103P</div><div class="total-label">총 페이지 수</div></div>
+    <div class="total-item"><div class="total-num">5장+INTRO</div><div class="total-label">체계적 구성</div></div>
+    <div class="total-item"><div class="total-num">즉시 PDF</div><div class="total-label">다운로드</div></div>
+  </div>
+</div>
+</body>
+</html>

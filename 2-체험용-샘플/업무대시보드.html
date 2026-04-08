@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>업무 대시보드</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg:      #13151f;
+      --card:    #1c1f2e;
+      --border:  #2a2d3e;
+      --text:    #e8eaf6;
+      --muted:   #6b7280;
+      --blue:    #6366f1;
+      --cyan:    #06b6d4;
+      --green:   #10b981;
+      --yellow:  #f59e0b;
+      --red:     #ef4444;
+      --pink:    #ec4899;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:var(--bg); color:var(--text); font-family:'Segoe UI',Arial,sans-serif; font-size:14px; }
+
+    /* 헤더 */
+    header {
+      background:var(--card); border-bottom:1px solid var(--border);
+      padding:16px 28px; display:flex; justify-content:space-between; align-items:center;
+    }
+    header h1 { font-size:17px; font-weight:800; }
+    header h1 span { background:linear-gradient(90deg,var(--blue),var(--cyan)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .hdr-right { display:flex; align-items:center; gap:12px; font-size:12px; color:var(--muted); }
+    .live { width:7px; height:7px; border-radius:50%; background:var(--green); box-shadow:0 0 8px var(--green); }
+
+    /* 그리드 */
+    .wrap { padding:22px 28px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:18px; }
+
+    /* 카드 */
+    .card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:20px; }
+    .card.span2 { grid-column:span 2; }
+    .card.span3 { grid-column:span 3; }
+    .card-t {
+      font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.8px;
+      color:var(--muted); display:flex; align-items:center; gap:7px; margin-bottom:16px;
+    }
+    .card-t .dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+
+    /* ── 날씨 카드 ── */
+    .weather-main { display:flex; align-items:center; gap:16px; margin-bottom:14px; }
+    .weather-icon { font-size:52px; line-height:1; }
+    .weather-info .city { font-size:12px; color:var(--muted); }
+    .weather-info .temp { font-size:36px; font-weight:800; line-height:1.1; }
+    .weather-info .desc { font-size:13px; color:var(--muted); margin-top:2px; }
+    .weather-details { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .wd-item { background:var(--bg); border-radius:8px; padding:8px 10px; }
+    .wd-item .wl { font-size:10px; color:var(--muted); }
+    .wd-item .wv { font-size:14px; font-weight:700; margin-top:2px; }
+
+    /* ── 경제 뉴스 ── */
+    .news-list { display:flex; flex-direction:column; gap:10px; }
+    .news-item { display:flex; gap:12px; padding:10px 12px; background:var(--bg); border-radius:10px; }
+    .news-num { font-size:11px; font-weight:800; color:var(--blue); width:18px; flex-shrink:0; padding-top:1px; }
+    .news-title { font-size:13px; font-weight:700; line-height:1.4; margin-bottom:3px; }
+    .news-desc  { font-size:11px; color:var(--muted); line-height:1.5; }
+    .news-tag {
+      display:inline-block; font-size:10px; padding:1px 7px; border-radius:6px;
+      margin-bottom:4px; font-weight:700;
+    }
+    .t-up   { background:#10b98120; color:var(--green); }
+    .t-down { background:#ef444420; color:var(--red); }
+    .t-info { background:#6366f120; color:var(--blue); }
+    .t-gold { background:#f59e0b20; color:var(--yellow); }
+
+    /* ── 할 일 ── */
+    .todo-add { display:flex; gap:7px; margin-bottom:12px; }
+    .todo-add input {
+      flex:1; background:var(--bg); border:1px solid var(--border); border-radius:8px;
+      padding:8px 12px; color:var(--text); font-size:12px; outline:none;
+    }
+    .todo-add input:focus { border-color:var(--blue); }
+    .todo-add input::placeholder { color:var(--muted); }
+    .sel {
+      background:var(--bg); border:1px solid var(--border); border-radius:8px;
+      padding:8px 8px; color:var(--text); font-size:11px; cursor:pointer; outline:none;
+    }
+    .add-btn {
+      background:var(--blue); border:none; border-radius:8px; padding:8px 14px;
+      color:white; font-size:12px; font-weight:700; cursor:pointer; white-space:nowrap;
+    }
+    .add-btn:hover { opacity:.85; }
+    .todo-list { display:flex; flex-direction:column; gap:6px; }
+    .t-item {
+      display:flex; align-items:center; gap:10px; padding:10px 12px;
+      background:var(--bg); border-radius:9px; border:1px solid transparent;
+      transition:border-color .2s;
+    }
+    .t-item:hover { border-color:var(--border); }
+    .t-item.done .t-text { text-decoration:line-through; color:var(--muted); }
+    .t-item.done { opacity:.55; }
+    .cb {
+      width:17px; height:17px; border-radius:4px; border:2px solid var(--border);
+      appearance:none; cursor:pointer; flex-shrink:0; background:transparent;
+      position:relative; transition:all .15s;
+    }
+    .cb:checked { background:var(--blue); border-color:var(--blue); }
+    .cb:checked::after { content:'✓'; position:absolute; top:-2px; left:1px; font-size:11px; font-weight:800; color:white; }
+    .t-text { flex:1; font-size:13px; line-height:1.3; }
+    .t-owner { font-size:10px; color:var(--muted); white-space:nowrap; }
+    .pri {
+      font-size:10px; font-weight:800; padding:1px 6px; border-radius:5px;
+      flex-shrink:0; white-space:nowrap;
+    }
+    .ph { background:#ef444418; color:var(--red); }
+    .pm { background:#f59e0b18; color:var(--yellow); }
+    .pl { background:#10b98118; color:var(--green); }
+    .del { background:none; border:none; color:var(--muted); cursor:pointer; font-size:13px; padding:0 2px; }
+    .del:hover { color:var(--red); }
+
+    /* ── 진행률 ── */
+    .prog-list { display:flex; flex-direction:column; gap:13px; }
+    .prog-item .ph2 { display:flex; justify-content:space-between; margin-bottom:5px; font-size:13px; }
+    .prog-item .pname { font-weight:600; }
+    .prog-item .ppct  { font-weight:700; }
+    .prog-bg { height:6px; background:var(--bg); border-radius:3px; overflow:hidden; }
+    .prog-fill { height:100%; border-radius:3px; }
+    .prog-sub { font-size:11px; color:var(--muted); margin-top:3px; }
+
+    /* ── 매출 ── */
+    .sales-row {
+      display:flex; align-items:center; gap:10px; padding:8px 10px;
+      background:var(--bg); border-radius:8px; margin-bottom:6px;
+    }
+    .s-rank { font-size:11px; font-weight:800; color:var(--muted); width:16px; }
+    .s-name { flex:1; font-size:13px; font-weight:600; }
+    .s-bar  { width:70px; height:5px; background:var(--border); border-radius:3px; overflow:hidden; }
+    .s-fill { height:100%; border-radius:3px; background:linear-gradient(90deg,var(--blue),var(--cyan)); }
+    .s-amt  { font-size:12px; font-weight:700; color:var(--cyan); width:60px; text-align:right; }
+
+    /* ── 일정 ── */
+    .week { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; }
+    .day  { text-align:center; }
+    .dlbl { font-size:10px; font-weight:700; color:var(--muted); padding:4px 0; }
+    .dnum { font-size:13px; font-weight:700; padding:4px 0; }
+    .dnum.today {
+      background:var(--blue); border-radius:50%; width:26px; height:26px;
+      display:flex; align-items:center; justify-content:center; margin:0 auto; font-size:12px; color:white;
+    }
+    .devent {
+      margin-top:3px; background:var(--bg); border-radius:6px; padding:4px 5px;
+      font-size:9.5px; line-height:1.4; border-left:2px solid var(--blue); text-align:left;
+    }
+    .devent.y { border-left-color:var(--yellow); }
+    .devent.g { border-left-color:var(--green); }
+    .devent.r { border-left-color:var(--red); }
+    .devent.p { border-left-color:var(--pink); }
+
+    .chart-wrap { height:190px; position:relative; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>◈ <span>마케팅팀</span> 업무 대시보드</h1>
+  <div class="hdr-right">
+    <div class="live"></div>
+    <span>2026년 4월 1일 (수)</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ── 날씨 ── -->
+  <div class="card">
+    <div class="card-t"><div class="dot" style="background:var(--cyan)"></div>오늘 날씨 · 서울</div>
+    <div class="weather-main">
+      <div class="weather-icon">🌥️</div>
+      <div class="weather-info">
+        <div class="city">서울특별시</div>
+        <div class="temp">12°C</div>
+        <div class="desc">대체로 흐림 · 오후 빗방울 가능</div>
+      </div>
+    </div>
+    <div class="weather-details">
+      <div class="wd-item">
+        <div class="wl">🌬️ 미세먼지</div>
+        <div class="wv" style="color:var(--yellow)">나쁨</div>
+      </div>
+      <div class="wd-item">
+        <div class="wl">💧 습도</div>
+        <div class="wv">68%</div>
+      </div>
+      <div class="wd-item">
+        <div class="wl">🌡️ 최저 / 최고</div>
+        <div class="wv">8° / 15°</div>
+      </div>
+      <div class="wd-item">
+        <div class="wl">☂️ 강수확률</div>
+        <div class="wv" style="color:var(--cyan)">오후 30%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 경제 뉴스 ── -->
+  <div class="card span2">
+    <div class="card-t"><div class="dot" style="background:var(--yellow)"></div>오늘의 경제 뉴스</div>
+    <div class="news-list">
+      <div class="news-item">
+        <div class="news-num">01</div>
+        <div>
+          <div class="news-tag t-up">채권시장 ↑</div>
+          <div class="news-title">한국 국고채 WGBI 공식 편입 — 오늘부터</div>
+          <div class="news-desc">세계국채지수(WGBI)에 한국 국고채 편입 시작. 11월까지 520~620억 달러 외국인 자금 유입 기대.</div>
+        </div>
+      </div>
+      <div class="news-item">
+        <div class="news-num">02</div>
+        <div>
+          <div class="news-tag t-up">반도체 ↑</div>
+          <div class="news-title">삼성전자 +8.6%, SK하이닉스 +8.5% 급등</div>
+          <div class="news-desc">3월 반도체 수출 사상 최대치 기록. 미국·이란 종전 기대감이 더해져 반도체주 동반 강세.</div>
+        </div>
+      </div>
+      <div class="news-item">
+        <div class="news-num">03</div>
+        <div>
+          <div class="news-tag t-gold">금 ↑</div>
+          <div class="news-title">금값 3.1% 급등 — 골드만삭스 "연말 5,400달러 전망"</div>
+          <div class="news-desc">금 가격 $4,700 근접. 골드만삭스는 Fed 금리 인하 시 연말 온스당 $5,400 도달 전망 발표.</div>
+        </div>
+      </div>
+      <div class="news-item">
+        <div class="news-num">04</div>
+        <div>
+          <div class="news-tag t-info">정부 예산</div>
+          <div class="news-title">2026년 정부 예산 727조 원 확정</div>
+          <div class="news-desc">AI 산업 10.1조 포함 전년 대비 8.1% 증가. 청년 자산 형성·저소득층 지원 중점 편성.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 할 일 ── -->
+  <div class="card span2">
+    <div class="card-t">
+      <div class="dot" style="background:var(--blue)"></div>
+      오늘 할 일
+      <span style="margin-left:auto;font-size:11px;background:var(--bg);padding:2px 10px;border-radius:10px;border:1px solid var(--border)" id="cnt"></span>
+    </div>
+    <div class="todo-add">
+      <input type="text" id="ti" placeholder="새 할 일 입력..." onkeydown="if(event.key==='Enter')add()">
+      <select class="sel" id="tp">
+        <option value="h">🔴 높음</option>
+        <option value="m" selected>🟡 보통</option>
+        <option value="l">🟢 낮음</option>
+      </select>
+      <input type="text" id="to" placeholder="담당자" style="width:70px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px 8px;color:var(--text);font-size:12px;outline:none;">
+      <button class="add-btn" onclick="add()">+ 추가</button>
+    </div>
+    <div class="todo-list" id="tl"></div>
+  </div>
+
+  <!-- ── 프로젝트 진행률 ── -->
+  <div class="card">
+    <div class="card-t"><div class="dot" style="background:var(--green)"></div>프로젝트 진행률</div>
+    <div class="prog-list">
+      <div class="prog-item">
+        <div class="ph2"><span class="pname">🎬 영상 광고 3편 제작</span><span class="ppct" style="color:var(--yellow)">20%</span></div>
+        <div class="prog-bg"><div class="prog-fill" style="width:20%;background:var(--yellow)"></div></div>
+        <div class="prog-sub">박사원 · B안 기반</div>
+      </div>
+      <div class="prog-item">
+        <div class="ph2"><span class="pname">🤝 인플루언서 협업</span><span class="ppct" style="color:var(--cyan)">45%</span></div>
+        <div class="prog-bg"><div class="prog-fill" style="width:45%;background:var(--cyan)"></div></div>
+        <div class="prog-sub">이과장 · 금요일 미팅</div>
+      </div>
+      <div class="prog-item">
+        <div class="ph2"><span class="pname">📋 3월 프로모션 기획</span><span class="ppct" style="color:var(--yellow)">30%</span></div>
+        <div class="prog-bg"><div class="prog-fill" style="width:30%;background:linear-gradient(90deg,var(--yellow),#fbbf24)"></div></div>
+        <div class="prog-sub">김대리 · 오늘 마감</div>
+      </div>
+      <div class="prog-item">
+        <div class="ph2"><span class="pname">🚀 4월 신제품 티저</span><span class="ppct" style="color:var(--pink)">5%</span></div>
+        <div class="prog-bg"><div class="prog-fill" style="width:5%;background:var(--pink)"></div></div>
+        <div class="prog-sub">3월 4주차 시작 · 전체팀</div>
+      </div>
+      <div class="prog-item">
+        <div class="ph2"><span class="pname">✅ SNS A/B 테스트</span><span class="ppct" style="color:var(--green)">100%</span></div>
+        <div class="prog-bg"><div class="prog-fill" style="width:100%;background:var(--green)"></div></div>
+        <div class="prog-sub">B안 클릭률 2.3배 — 완료</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 이번 주 일정 ── -->
+  <div class="card span2">
+    <div class="card-t"><div class="dot" style="background:var(--pink)"></div>이번 주 일정</div>
+    <div class="week">
+      <div class="day"><div class="dlbl">MON</div><div class="dnum">30</div><div class="devent">주간 회의<br>10:00</div></div>
+      <div class="day"><div class="dlbl">TUE</div><div class="dnum">31</div><div class="devent r">🎤 AI 포럼<br>아주대</div></div>
+      <div class="day"><div class="dlbl">WED</div><div class="dnum today">1</div><div class="devent y">📋 기획안<br>제출</div></div>
+      <div class="day"><div class="dlbl">THU</div><div class="dnum">2</div><div class="devent">경쟁사<br>분석</div></div>
+      <div class="day"><div class="dlbl">FRI</div><div class="dnum">3</div><div class="devent g">🤝 인플루<br>언서 미팅</div></div>
+      <div class="day"><div class="dlbl">SAT</div><div class="dnum">4</div></div>
+      <div class="day"><div class="dlbl">SUN</div><div class="dnum">5</div></div>
+    </div>
+  </div>
+
+  <!-- ── 매출 현황 ── -->
+  <div class="card">
+    <div class="card-t"><div class="dot" style="background:var(--cyan)"></div>매출 현황 (1~2월)</div>
+    <div style="display:flex;gap:16px;align-items:center;margin-bottom:14px">
+      <div>
+        <div style="font-size:11px;color:var(--muted)">누적 매출</div>
+        <div style="font-size:22px;font-weight:800;color:var(--cyan)">₩7,100만</div>
+      </div>
+      <div style="flex:1;height:1px;background:var(--border)"></div>
+      <div style="text-align:right">
+        <div style="font-size:11px;color:var(--muted)">1위 제품</div>
+        <div style="font-size:15px;font-weight:700">무선 이어폰</div>
+      </div>
+    </div>
+    <div class="sales-row"><div class="s-rank">1</div><div class="s-name">무선 이어폰</div><div class="s-bar"><div class="s-fill" style="width:100%"></div></div><div class="s-amt">2,884만</div></div>
+    <div class="sales-row"><div class="s-rank">2</div><div class="s-name">텀블러</div><div class="s-bar"><div class="s-fill" style="width:40%"></div></div><div class="s-amt">1,153만</div></div>
+    <div class="sales-row"><div class="s-rank">3</div><div class="s-name">블루투스 스피커</div><div class="s-bar"><div class="s-fill" style="width:33%"></div></div><div class="s-amt">960만</div></div>
+    <div class="sales-row"><div class="s-rank">4</div><div class="s-name">보조배터리</div><div class="s-bar"><div class="s-fill" style="width:31%"></div></div><div class="s-amt">903만</div></div>
+    <div class="sales-row"><div class="s-rank">5</div><div class="s-name">에코백</div><div class="s-bar"><div class="s-fill" style="width:21%"></div></div><div class="s-amt">617만</div></div>
+  </div>
+
+</div>
+
+<script>
+  let todos = [
+    { id:1, text:'3월 프로모션 기획안 초안 제출', p:'h', owner:'김대리', done:false },
+    { id:2, text:'영상 광고 3개 제작 시작 (B안 기반)', p:'h', owner:'박사원', done:false },
+    { id:3, text:'인플루언서 미팅 일정 확정', p:'h', owner:'이과장', done:false },
+    { id:4, text:'경쟁사 C사 캠페인 분석', p:'m', owner:'박사원', done:false },
+    { id:5, text:'영상 제작비 200만원 예산 승인 요청', p:'m', owner:'정팀장', done:false },
+    { id:6, text:'SNS A/B 테스트 결과 최종 정리', p:'l', owner:'전체', done:true },
+    { id:7, text:'블로그 콘텐츠 3건 발행 완료', p:'l', owner:'전체', done:true },
+  ];
+  let nid = 8;
+
+  function render() {
+    const el = document.getElementById('tl');
+    const sorted = [...todos].sort((a,b) => {
+      const o={h:0,m:1,l:2}; return o[a.p]-o[b.p];
+    });
+    el.innerHTML = sorted.map(t => `
+      <div class="t-item ${t.done?'done':''}">
+        <input type="checkbox" class="cb" ${t.done?'checked':''} onchange="tog(${t.id})">
+        <span class="t-text">${t.text}</span>
+        <span class="t-owner">${t.owner}</span>
+        <span class="pri ${t.p==='h'?'ph':t.p==='m'?'pm':'pl'}">${t.p==='h'?'높음':t.p==='m'?'보통':'낮음'}</span>
+        <button class="del" onclick="del(${t.id})">✕</button>
+      </div>`).join('');
+    const done = todos.filter(t=>t.done).length;
+    document.getElementById('cnt').textContent = done + ' / ' + todos.length + ' 완료';
+  }
+  function tog(id){ const t=todos.find(x=>x.id===id); if(t) t.done=!t.done; render(); }
+  function del(id){ todos=todos.filter(x=>x.id!==id); render(); }
+  function add(){
+    const v=document.getElementById('ti').value.trim();
+    if(!v) return;
+    todos.unshift({id:nid++,text:v,p:document.getElementById('tp').value,owner:document.getElementById('to').value.trim()||'나',done:false});
+    document.getElementById('ti').value='';
+    document.getElementById('to').value='';
+    render();
+  }
+  render();
+</script>
+</body>
+</html>

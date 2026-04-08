@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "상세페이지-미리보기",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "9123"],
+      "port": 9123
+    }
+  ]
+}

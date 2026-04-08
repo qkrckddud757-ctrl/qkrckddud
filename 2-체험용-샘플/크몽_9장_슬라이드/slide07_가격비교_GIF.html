@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>슬라이드 07 — 가격 비교</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:linear-gradient(180deg,#080808,#0a0800);font-family:'Noto Sans KR','Segoe UI',sans-serif;width:1080px;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.04);}}
+@keyframes glow{0%,100%{box-shadow:0 0 20px #ff3b3b44;}50%{box-shadow:0 0 50px #ff3b3baa,0 0 80px #ff3b3b33;}}
+.slide{padding:60px 60px;display:flex;flex-direction:column;align-items:center;}
+.label{font-size:12px;font-weight:900;letter-spacing:4px;color:#ff7b00;margin-bottom:16px;}
+.title{font-size:38px;font-weight:900;color:white;text-align:center;line-height:1.3;margin-bottom:12px;}
+.sub{font-size:15px;color:#666;text-align:center;margin-bottom:40px;}
+.eb-bar{width:100%;max-width:900px;background:#1a0800;border:2px solid #ff7b00;border-radius:14px;padding:18px 28px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:20px;}
+.eb-left{flex:1;}
+.eb-title{font-size:16px;font-weight:900;color:#ff9944;margin-bottom:6px;}
+.eb-slots{display:flex;gap:6px;align-items:center;margin-bottom:6px;}
+.eb-slot{width:32px;height:10px;border-radius:3px;}
+.eb-slot.taken{background:#333;}
+.eb-slot.available{background:#ff7b00;animation:pulse 2s ease-in-out infinite;}
+.eb-desc{font-size:12px;color:#ff7777;font-weight:700;}
+.eb-right{text-align:center;}
+.eb-count{font-size:42px;font-weight:900;color:#ff7b00;line-height:1;}
+.eb-label{font-size:11px;color:#888;margin-top:2px;}
+.table{width:100%;max-width:900px;border-radius:14px;overflow:hidden;margin-bottom:28px;border:1px solid #222;}
+.th{display:grid;grid-template-columns:1fr 1fr 1fr;background:#111;}
+.th div{padding:16px 18px;font-size:13px;font-weight:800;text-align:center;}
+.th .h-this{background:linear-gradient(135deg,#ff7b00,#ff3b3b);color:white;position:relative;}
+.th .h-this::after{content:'추천';position:absolute;top:-10px;right:10px;background:#ffd700;color:#000;font-size:9px;font-weight:900;padding:3px 8px;border-radius:10px;}
+.th .h-other{color:#555;}
+.tr{display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid #1a1a1a;}
+.tr div{padding:14px 18px;font-size:13px;text-align:center;color:#bbb;display:flex;align-items:center;justify-content:center;}
+.tr div:first-child{justify-content:flex-start;color:#666;font-size:12px;}
+.tr .c-this{background:#ff7b0008;color:white;font-weight:700;}
+.tr .c-bad{color:#444;}
+.price-box{background:#0d0800;border:2px solid #ff7b0055;border-radius:18px;padding:36px;width:100%;max-width:900px;text-align:center;position:relative;overflow:hidden;animation:glow 3s ease-in-out infinite;}
+.price-box::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse,#ff7b0008,transparent 60%);pointer-events:none;}
+.p-orig{font-size:17px;color:#555;text-decoration:line-through;margin-bottom:6px;}
+.p-badge{display:inline-block;background:#ff3b3b;color:white;font-size:12px;font-weight:900;padding:4px 14px;border-radius:20px;margin-bottom:10px;}
+.p-now{font-size:68px;font-weight:900;color:#ff7b00;line-height:1;}
+.p-warn{font-size:12px;color:#ff7777;font-weight:700;margin-top:6px;animation:blink 2s infinite;}
+.p-note{font-size:14px;color:#666;margin-top:8px;}
+.p-val{font-size:17px;font-weight:700;color:white;margin-top:16px;}
+.p-val span{color:#ffd700;}
+.installment{background:#ffd70018;border:1px solid #ffd70044;border-radius:30px;padding:7px 22px;display:inline-block;font-size:13px;color:#ffd700;font-weight:700;margin-top:14px;animation:pulse 2s ease-in-out infinite;}
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="label">💰 가격 & 가치 비교</div>
+  <div class="title">이 정보를<br>다른 방법으로 얻으려면?</div>
+  <div class="sub">같은 내용을 오프라인에서 배우면 이 금액이 듭니다</div>
+
+  <div class="eb-bar">
+    <div class="eb-left">
+      <div class="eb-title">⏰ 얼리버드 특가 — 마감 임박</div>
+      <div class="eb-slots">
+        <span class="eb-slot taken"></span><span class="eb-slot taken"></span><span class="eb-slot taken"></span>
+        <span class="eb-slot taken"></span><span class="eb-slot taken"></span><span class="eb-slot taken"></span>
+        <span class="eb-slot taken"></span><span class="eb-slot taken"></span><span class="eb-slot taken"></span>
+        <span class="eb-slot taken"></span><span class="eb-slot taken"></span><span class="eb-slot taken"></span>
+        <span class="eb-slot taken"></span>
+        <span class="eb-slot available"></span><span class="eb-slot available"></span><span class="eb-slot available"></span>
+        <span class="eb-slot available"></span><span class="eb-slot available"></span><span class="eb-slot available"></span>
+        <span class="eb-slot available"></span>
+      </div>
+      <div class="eb-desc">20자리 중 13자리 완료 · 마감 시 정가(₩59,000) 복귀</div>
+    </div>
+    <div class="eb-right">
+      <div class="eb-count">7</div>
+      <div class="eb-label">자리 남음</div>
+    </div>
+  </div>
+
+  <div class="table">
+    <div class="th">
+      <div class="h-other">다른 방법</div>
+      <div class="h-this">이 전자책</div>
+      <div class="h-other">차이</div>
+    </div>
+    <div class="tr"><div>오프라인 세미나 1회</div><div class="c-this">이 책 1권</div><div class="c-bad">300,000~500,000원 vs</div></div>
+    <div class="tr"><div>개인 코칭 1:1 1시간</div><div class="c-this">전액 포함</div><div class="c-bad">100,000~200,000원 vs</div></div>
+    <div class="tr"><div>AI 마케팅 강의 수강</div><div class="c-this">AI 공식 수록</div><div class="c-bad">300,000~1,000,000원 vs</div></div>
+    <div class="tr"><div>PT 세일즈 강의</div><div class="c-this">₩39,000</div><div class="c-bad">500,000~1,000,000원 vs</div></div>
+    <div class="tr"><div>세일즈북 + 관리파일</div><div class="c-this" style="color:#ffd700">후기 작성 시 무료</div><div class="c-bad">별도 구매 필요 vs</div></div>
+  </div>
+
+  <div class="price-box">
+    <div class="p-orig">오프라인 세미나 기준 1,000,000원+ 이상의 가치</div>
+    <div class="p-badge">34% 할인 · 얼리버드 7자리 한정</div>
+    <div class="p-now">₩39,000</div>
+    <div class="p-warn">⚠️ 마감 후 ₩59,000으로 가격 인상</div>
+    <div class="p-note">VAT 포함 · 24시간 이내 즉시 다운로드</div>
+    <div class="p-val">커피 <span>13잔</span> 값으로 매달 반복되는 매출 불안을 끝낼 수 있습니다</div>
+    <div class="installment">💳 월 6,500원 · 6개월 무이자 할부 가능</div>
+  </div>
+</div>
+</body>
+</html>

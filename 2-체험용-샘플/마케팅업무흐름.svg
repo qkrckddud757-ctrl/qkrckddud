@@ -1,0 +1,198 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 340" width="1000" height="340" font-family="'Segoe UI', Arial, sans-serif">
+  <defs>
+    <!-- 배경 그라디언트 -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f0f4ff"/>
+      <stop offset="100%" style="stop-color:#e8eeff"/>
+    </linearGradient>
+
+    <!-- 카드 그림자 필터 -->
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#b0b8e0" flood-opacity="0.35"/>
+    </filter>
+    <filter id="arrowShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#8090cc" flood-opacity="0.3"/>
+    </filter>
+
+    <!-- 단계별 카드 그라디언트 -->
+    <linearGradient id="g1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea"/>
+      <stop offset="100%" style="stop-color:#5a6fd6"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f093fb"/>
+      <stop offset="100%" style="stop-color:#d670e0"/>
+    </linearGradient>
+    <linearGradient id="g3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4facfe"/>
+      <stop offset="100%" style="stop-color:#2d8ee8"/>
+    </linearGradient>
+    <linearGradient id="g4" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#43e97b"/>
+      <stop offset="100%" style="stop-color:#28c96a"/>
+    </linearGradient>
+    <linearGradient id="g5" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#fa709a"/>
+      <stop offset="100%" style="stop-color:#e04e80"/>
+    </linearGradient>
+
+    <!-- 아이콘 원형 배경 -->
+    <linearGradient id="ic1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.35"/>
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.10"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 배경 -->
+  <rect width="1000" height="340" rx="20" fill="url(#bgGrad)"/>
+
+  <!-- 타이틀 -->
+  <text x="500" y="42" text-anchor="middle" font-size="20" font-weight="700" fill="#3d4a8a" letter-spacing="1">마케팅 업무 흐름</text>
+  <line x1="380" y1="52" x2="620" y2="52" stroke="#b0b8e0" stroke-width="1.5"/>
+
+  <!-- ======== STEP 1: 기획 ======== -->
+  <g transform="translate(46, 80)" filter="url(#shadow)">
+    <rect width="152" height="190" rx="18" fill="url(#g1)"/>
+    <!-- 아이콘 배경 원 -->
+    <circle cx="76" cy="62" r="36" fill="url(#ic1)"/>
+    <!-- 아이콘: 전구 (기획) -->
+    <g transform="translate(76,62)" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M0,-22 C-12,-22 -20,-14 -20,-4 C-20,6 -14,14 -6,18 L-6,24 L6,24 L6,18 C14,14 20,6 20,-4 C20,-14 12,-22 0,-22Z" fill="rgba(255,255,255,0.25)" stroke="white"/>
+      <line x1="-6" y1="24" x2="6" y2="24"/>
+      <line x1="-5" y1="28" x2="5" y2="28"/>
+    </g>
+    <!-- 단계 번호 -->
+    <rect x="60" y="108" width="32" height="18" rx="9" fill="rgba(255,255,255,0.25)"/>
+    <text x="76" y="121" text-anchor="middle" font-size="11" font-weight="700" fill="white">STEP 1</text>
+    <!-- 제목 -->
+    <text x="76" y="150" text-anchor="middle" font-size="20" font-weight="800" fill="white">기획</text>
+    <!-- 설명 -->
+    <text x="76" y="172" text-anchor="middle" font-size="11.5" fill="rgba(255,255,255,0.85)">목표 · 전략 수립</text>
+  </g>
+
+  <!-- 화살표 1→2 -->
+  <g filter="url(#arrowShadow)">
+    <path d="M210,168 C222,168 226,168 238,168" stroke="#8090d0" stroke-width="2.5" fill="none" stroke-dasharray="5,3"/>
+    <polygon points="238,163 248,168 238,173" fill="#8090d0"/>
+  </g>
+
+  <!-- ======== STEP 2: 콘텐츠 제작 ======== -->
+  <g transform="translate(256, 80)" filter="url(#shadow)">
+    <rect width="152" height="190" rx="18" fill="url(#g2)"/>
+    <circle cx="76" cy="62" r="36" fill="url(#ic1)"/>
+    <!-- 아이콘: 펜/편집 (콘텐츠 제작) -->
+    <g transform="translate(76,62)" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="-18" y="-16" width="28" height="32" rx="3" fill="rgba(255,255,255,0.2)" stroke="white"/>
+      <line x1="-12" y1="-6" x2="4" y2="-6"/>
+      <line x1="-12" y1="0" x2="4" y2="0"/>
+      <line x1="-12" y1="6" x2="0" y2="6"/>
+      <g transform="translate(8, 4) rotate(-45)">
+        <rect x="-4" y="-14" width="8" height="14" rx="2" fill="rgba(255,255,255,0.4)" stroke="white"/>
+        <polygon points="-4,0 4,0 0,8" fill="white"/>
+      </g>
+    </g>
+    <rect x="60" y="108" width="32" height="18" rx="9" fill="rgba(255,255,255,0.25)"/>
+    <text x="76" y="121" text-anchor="middle" font-size="11" font-weight="700" fill="white">STEP 2</text>
+    <text x="76" y="150" text-anchor="middle" font-size="16" font-weight="800" fill="white">콘텐츠 제작</text>
+    <text x="76" y="172" text-anchor="middle" font-size="11.5" fill="rgba(255,255,255,0.85)">영상 · 이미지 · 글</text>
+  </g>
+
+  <!-- 화살표 2→3 -->
+  <g filter="url(#arrowShadow)">
+    <path d="M420,168 C432,168 436,168 448,168" stroke="#8090d0" stroke-width="2.5" fill="none" stroke-dasharray="5,3"/>
+    <polygon points="448,163 458,168 448,173" fill="#8090d0"/>
+  </g>
+
+  <!-- ======== STEP 3: 검토 ======== -->
+  <g transform="translate(466, 80)" filter="url(#shadow)">
+    <rect width="152" height="190" rx="18" fill="url(#g3)"/>
+    <circle cx="76" cy="62" r="36" fill="url(#ic1)"/>
+    <!-- 아이콘: 체크 클립보드 (검토) -->
+    <g transform="translate(76,62)" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="-16" y="-18" width="32" height="36" rx="3" fill="rgba(255,255,255,0.2)" stroke="white"/>
+      <rect x="-8" y="-22" width="16" height="8" rx="4" fill="rgba(255,255,255,0.4)" stroke="white"/>
+      <polyline points="-9,0 -3,6 10,-8" stroke="white" stroke-width="2.8" fill="none"/>
+    </g>
+    <rect x="60" y="108" width="32" height="18" rx="9" fill="rgba(255,255,255,0.25)"/>
+    <text x="76" y="121" text-anchor="middle" font-size="11" font-weight="700" fill="white">STEP 3</text>
+    <text x="76" y="150" text-anchor="middle" font-size="20" font-weight="800" fill="white">검토</text>
+    <text x="76" y="172" text-anchor="middle" font-size="11.5" fill="rgba(255,255,255,0.85)">피드백 · 수정 · 승인</text>
+  </g>
+
+  <!-- 화살표 3→4 -->
+  <g filter="url(#arrowShadow)">
+    <path d="M630,168 C642,168 646,168 658,168" stroke="#8090d0" stroke-width="2.5" fill="none" stroke-dasharray="5,3"/>
+    <polygon points="658,163 668,168 658,173" fill="#8090d0"/>
+  </g>
+
+  <!-- ======== STEP 4: 배포 ======== -->
+  <g transform="translate(676, 80)" filter="url(#shadow)">
+    <rect width="152" height="190" rx="18" fill="url(#g4)"/>
+    <circle cx="76" cy="62" r="36" fill="url(#ic1)"/>
+    <!-- 아이콘: 로켓 (배포) -->
+    <g transform="translate(76,62)" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M0,-22 C10,-16 16,-6 16,4 C16,14 8,20 0,22 C-8,20 -16,14 -16,4 C-16,-6 -10,-16 0,-22Z" fill="rgba(255,255,255,0.3)" stroke="white"/>
+      <circle cx="0" cy="0" r="5" fill="rgba(255,255,255,0.6)" stroke="white"/>
+      <path d="M-16,10 L-22,18 L-14,16 Z" fill="rgba(255,255,255,0.5)" stroke="white"/>
+      <path d="M16,10 L22,18 L14,16 Z" fill="rgba(255,255,255,0.5)" stroke="white"/>
+    </g>
+    <rect x="60" y="108" width="32" height="18" rx="9" fill="rgba(255,255,255,0.25)"/>
+    <text x="76" y="121" text-anchor="middle" font-size="11" font-weight="700" fill="white">STEP 4</text>
+    <text x="76" y="150" text-anchor="middle" font-size="20" font-weight="800" fill="white">배포</text>
+    <text x="76" y="172" text-anchor="middle" font-size="11.5" fill="rgba(255,255,255,0.85)">채널 · 일정 게시</text>
+  </g>
+
+  <!-- 화살표 4→5 -->
+  <g filter="url(#arrowShadow)">
+    <path d="M840,168 C852,168 856,168 868,168" stroke="#8090d0" stroke-width="2.5" fill="none" stroke-dasharray="5,3"/>
+    <polygon points="868,163 878,168 868,173" fill="#8090d0"/>
+  </g>
+
+  <!-- ======== STEP 5: 성과 분석 ======== -->
+  <g transform="translate(886, 80)" filter="url(#shadow)">
+    <rect width="86" height="190" rx="18" fill="url(#g5)"/>
+    <circle cx="43" cy="62" r="36" fill="url(#ic1)"/>
+    <!-- 아이콘: 차트/그래프 (성과 분석) -->
+    <g transform="translate(43,62)" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="-18" y1="18" x2="18" y2="18"/>
+      <line x1="-18" y1="18" x2="-18" y2="-18"/>
+      <rect x="-14" y="4" width="8" height="14" rx="2" fill="rgba(255,255,255,0.5)" stroke="none"/>
+      <rect x="-2" y="-4" width="8" height="22" rx="2" fill="rgba(255,255,255,0.7)" stroke="none"/>
+      <rect x="10" y="-12" width="8" height="30" rx="2" fill="white" stroke="none"/>
+    </g>
+    <rect x="27" y="108" width="32" height="18" rx="9" fill="rgba(255,255,255,0.25)"/>
+    <text x="43" y="121" text-anchor="middle" font-size="11" font-weight="700" fill="white">STEP 5</text>
+    <text x="43" y="148" text-anchor="middle" font-size="14" font-weight="800" fill="white">성과</text>
+    <text x="43" y="164" text-anchor="middle" font-size="14" font-weight="800" fill="white">분석</text>
+    <text x="43" y="180" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.85)">KPI 리포트</text>
+  </g>
+
+  <!-- 하단 레이블 점선 연결선 -->
+  <line x1="122" y1="278" x2="122" y2="290" stroke="#b0b8e0" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <line x1="332" y1="278" x2="332" y2="290" stroke="#b0b8e0" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <line x1="542" y1="278" x2="542" y2="290" stroke="#b0b8e0" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <line x1="752" y1="278" x2="752" y2="290" stroke="#b0b8e0" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <line x1="929" y1="278" x2="929" y2="290" stroke="#b0b8e0" stroke-width="1.5" stroke-dasharray="3,2"/>
+
+  <!-- 하단 툴팁 박스 -->
+  <g>
+    <rect x="54" y="290" width="136" height="30" rx="8" fill="#667eea" opacity="0.15"/>
+    <text x="122" y="310" text-anchor="middle" font-size="11" fill="#5a6fd6" font-weight="600">목표 설정 · 타겟 분석</text>
+  </g>
+  <g>
+    <rect x="264" y="290" width="136" height="30" rx="8" fill="#f093fb" opacity="0.15"/>
+    <text x="332" y="310" text-anchor="middle" font-size="11" fill="#c060d0" font-weight="600">SNS · 블로그 · 광고</text>
+  </g>
+  <g>
+    <rect x="474" y="290" width="136" height="30" rx="8" fill="#4facfe" opacity="0.15"/>
+    <text x="542" y="310" text-anchor="middle" font-size="11" fill="#2d8ee8" font-weight="600">팀장 승인 · QA 체크</text>
+  </g>
+  <g>
+    <rect x="684" y="290" width="136" height="30" rx="8" fill="#43e97b" opacity="0.15"/>
+    <text x="752" y="310" text-anchor="middle" font-size="11" fill="#1a9e50" font-weight="600">예약 발행 · 멀티채널</text>
+  </g>
+  <g>
+    <rect x="880" y="290" width="98" height="30" rx="8" fill="#fa709a" opacity="0.15"/>
+    <text x="929" y="310" text-anchor="middle" font-size="11" fill="#c04070" font-weight="600">CTR · ROI · CVR</text>
+  </g>
+</svg>

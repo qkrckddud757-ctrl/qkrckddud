@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>크몽 판매 전략 대시보드 | 트레이너 월1000만 매출 자동화 시스템</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root {
+  --bg:     #0d0f18;
+  --bg2:    #13161f;
+  --bg3:    #1a1d2e;
+  --bd:     #252840;
+  --text:   #e8eaf6;
+  --muted:  #6b7280;
+  --blue:   #6366f1;
+  --cyan:   #06b6d4;
+  --green:  #10b981;
+  --yellow: #f59e0b;
+  --red:    #ef4444;
+  --pink:   #ec4899;
+  --orange: #f97316;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-serif;font-size:14px;}
+
+/* ── 탭 네비 ── */
+.nav{background:var(--bg2);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 28px;gap:0;position:sticky;top:0;z-index:100;}
+.nav-logo{font-size:15px;font-weight:800;padding:16px 20px 16px 0;border-right:1px solid var(--bd);margin-right:16px;white-space:nowrap;}
+.nav-logo span{background:linear-gradient(90deg,var(--orange),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.tab{padding:16px 20px;cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;}
+.tab:hover{color:var(--text);}
+.tab.on{color:var(--text);border-bottom-color:var(--orange);}
+
+/* ── 페이지 ── */
+.page{display:none;padding:24px 28px;max-width:1200px;margin:0 auto;}
+.page.on{display:block;}
+
+/* ── 공통 카드 ── */
+.card{background:var(--bg2);border:1px solid var(--bd);border-radius:14px;padding:22px 24px;margin-bottom:18px;}
+.card-t{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);display:flex;align-items:center;gap:8px;margin-bottom:16px;}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin-bottom:18px;}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px;}
+
+/* ── KPI ── */
+.kpi{background:var(--bg2);border:1px solid var(--bd);border-radius:12px;padding:18px;text-align:center;}
+.kpi .v{font-size:24px;font-weight:800;line-height:1.1;}
+.kpi .l{font-size:11px;color:var(--muted);margin-top:4px;}
+.kpi .s{font-size:11px;margin-top:3px;}
+
+/* ── 리뷰 카드 ── */
+.review-item{background:var(--bg3);border-radius:10px;padding:14px 16px;margin-bottom:10px;border-left:3px solid var(--green);}
+.review-item.bad{border-left-color:var(--red);}
+.review-header{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.stars{color:var(--yellow);font-size:13px;}
+.review-date{font-size:11px;color:var(--muted);}
+.review-text{font-size:13px;line-height:1.7;color:#c5c8e0;}
+.review-tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;margin-top:8px;}
+.rt-green{background:#10b98120;color:var(--green);}
+.rt-red{background:#ef444420;color:var(--red);}
+.rt-blue{background:#6366f120;color:var(--blue);}
+
+/* ── 전략 카드 ── */
+.strategy-item{display:flex;gap:14px;padding:14px 16px;background:var(--bg3);border-radius:10px;margin-bottom:10px;border-left:3px solid var(--blue);}
+.s-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;margin-top:1px;}
+.s-body{}
+.s-title{font-size:14px;font-weight:700;margin-bottom:4px;}
+.s-desc{font-size:12px;color:#a0a4c0;line-height:1.6;}
+.s-expect{font-size:11px;margin-top:6px;padding:4px 10px;border-radius:6px;display:inline-block;}
+.pri-h{background:#ef444418;color:var(--red);border:1px solid #ef444430;}
+.pri-m{background:#f59e0b18;color:var(--yellow);border:1px solid #f59e0b30;}
+.pri-l{background:#10b98118;color:var(--green);border:1px solid #10b98130;}
+
+/* ── 진행률 ── */
+.prog-item{margin-bottom:14px;}
+.prog-head{display:flex;justify-content:space-between;margin-bottom:5px;font-size:13px;}
+.prog-bg{height:7px;background:var(--bg3);border-radius:4px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:4px;}
+.prog-sub{font-size:11px;color:var(--muted);margin-top:3px;}
+
+/* ── 타임라인 ── */
+.timeline{position:relative;padding-left:24px;}
+.timeline::before{content:'';position:absolute;left:7px;top:0;bottom:0;width:2px;background:var(--bd);}
+.tl-item{position:relative;margin-bottom:20px;}
+.tl-dot{position:absolute;left:-21px;top:3px;width:12px;height:12px;border-radius:50%;border:2px solid var(--blue);background:var(--bg);}
+.tl-dot.done{background:var(--green);border-color:var(--green);}
+.tl-dot.now{background:var(--orange);border-color:var(--orange);box-shadow:0 0 8px var(--orange);}
+.tl-week{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;margin-bottom:6px;}
+.tl-tasks{display:flex;flex-direction:column;gap:6px;}
+.tl-task{background:var(--bg3);border-radius:8px;padding:9px 12px;font-size:12px;line-height:1.5;border:1px solid var(--bd);}
+.tl-task strong{color:var(--text);}
+.tl-task .effect{font-size:11px;color:var(--cyan);margin-top:3px;}
+
+/* ── 할 일 대시보드 ── */
+.todo-add{display:flex;gap:7px;margin-bottom:12px;}
+.todo-add input,.sel2{background:var(--bg3);border:1px solid var(--bd);border-radius:8px;padding:8px 12px;color:var(--text);font-size:12px;outline:none;}
+.todo-add input{flex:1;}
+.todo-add input::placeholder{color:var(--muted);}
+.todo-add input:focus{border-color:var(--orange);}
+.sel2{cursor:pointer;}
+.add-btn{background:var(--orange);border:none;border-radius:8px;padding:8px 16px;color:white;font-size:12px;font-weight:700;cursor:pointer;}
+.add-btn:hover{opacity:.85;}
+.tlist{display:flex;flex-direction:column;gap:6px;}
+.titem{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg3);border-radius:9px;border:1px solid transparent;transition:border-color .2s;}
+.titem:hover{border-color:var(--bd);}
+.titem.done .ttext{text-decoration:line-through;color:var(--muted);}
+.titem.done{opacity:.5;}
+.cb{width:17px;height:17px;border-radius:4px;border:2px solid var(--bd);appearance:none;cursor:pointer;flex-shrink:0;background:transparent;position:relative;transition:all .15s;}
+.cb:checked{background:var(--orange);border-color:var(--orange);}
+.cb:checked::after{content:'✓';position:absolute;top:-2px;left:1px;font-size:11px;font-weight:800;color:white;}
+.ttext{flex:1;font-size:13px;}
+.ttag{font-size:10px;font-weight:700;padding:1px 6px;border-radius:5px;}
+.del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;}
+.del:hover{color:var(--red);}
+
+/* ── 요약 테이블 ── */
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{background:var(--bg3);color:var(--muted);font-size:11px;font-weight:700;text-transform:uppercase;padding:10px 14px;text-align:left;letter-spacing:.5px;}
+td{padding:10px 14px;border-bottom:1px solid var(--bd);}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--bg3);}
+
+/* ── 차트 ── */
+.chart-wrap{height:220px;position:relative;}
+.chart-wrap-sm{height:180px;position:relative;}
+
+/* ── 섹션 제목 ── */
+.sec-h{font-size:18px;font-weight:800;margin-bottom:18px;display:flex;align-items:center;gap:10px;}
+.sec-h .badge{font-size:11px;padding:3px 10px;border-radius:10px;background:var(--orange)22;color:var(--orange);border:1px solid var(--orange)44;font-weight:700;}
+
+/* ── 인사이트 박스 ── */
+.insight{padding:14px 16px;border-radius:10px;font-size:13px;line-height:1.7;margin-bottom:10px;}
+.insight.blue{background:#6366f115;border:1px solid #6366f130;border-left:3px solid var(--blue);}
+.insight.orange{background:#f9731615;border:1px solid #f9731630;border-left:3px solid var(--orange);}
+.insight.red{background:#ef444415;border:1px solid #ef444430;border-left:3px solid var(--red);}
+.insight.green{background:#10b98115;border:1px solid #10b98130;border-left:3px solid var(--green);}
+.insight strong{color:var(--text);}
+
+@media(max-width:900px){.grid2,.grid3,.grid4{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<!-- ── 네비게이션 탭 ── -->
+<nav class="nav">
+  <div class="nav-logo">◈ <span>크몽 판매 전략</span></div>
+  <div class="tab on" onclick="show('p1',this)">📊 상품 분석</div>
+  <div class="tab" onclick="show('p2',this)">💬 리뷰 분석</div>
+  <div class="tab" onclick="show('p3',this)">🚀 판매율 향상 계획</div>
+  <div class="tab" onclick="show('p4',this)">📅 실행 로드맵</div>
+  <div class="tab" onclick="show('p5',this)">✅ 업무 대시보드</div>
+</nav>
+
+<!-- ══════════════════════════════════════
+     PAGE 1 · 상품 분석
+══════════════════════════════════════ -->
+<div id="p1" class="page on">
+  <div class="sec-h">📊 상품 현황 분석 <span class="badge">2026.04.01 기준</span></div>
+
+  <!-- KPI -->
+  <div class="grid4">
+    <div class="kpi" style="border-top:3px solid var(--yellow)">
+      <div class="v" style="color:var(--yellow)">4.88</div>
+      <div class="l">평균 평점 (219건)</div>
+      <div class="s" style="color:var(--green)">★★★★★ 상위 5%</div>
+    </div>
+    <div class="kpi" style="border-top:3px solid var(--green)">
+      <div class="v" style="color:var(--green)">434건</div>
+      <div class="l">총 거래 건수</div>
+      <div class="s" style="color:var(--cyan)">누적 매출 약 1,693만원</div>
+    </div>
+    <div class="kpi" style="border-top:3px solid var(--blue)">
+      <div class="v" style="color:var(--blue)">98%</div>
+      <div class="l">구매자 만족도</div>
+      <div class="s" style="color:var(--green)">업계 평균 대비 매우 높음</div>
+    </div>
+    <div class="kpi" style="border-top:3px solid var(--orange)">
+      <div class="v" style="color:var(--orange)">39,000원</div>
+      <div class="l">판매가 (VAT 포함)</div>
+      <div class="s" style="color:var(--muted)">단일 상품 구조</div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <!-- 상품 기본 정보 -->
+    <div class="card">
+      <div class="card-t"><div class="dot" style="background:var(--orange)"></div>상품 기본 정보</div>
+      <table>
+        <tr><td style="color:var(--muted);width:110px">상품명</td><td style="font-weight:700">트레이너 월1000만 매출 자동화 시스템</td></tr>
+        <tr><td style="color:var(--muted)">카테고리</td><td>전자책 › 학습·교육 › 기타</td></tr>
+        <tr><td style="color:var(--muted)">형식</td><td>PDF · 103페이지</td></tr>
+        <tr><td style="color:var(--muted)">추가 제공</td><td>메시지 상담·코칭 / 후기 작성 시 세일즈북·관리파일 템플릿·오픈채팅방</td></tr>
+        <tr><td style="color:var(--muted)">판매자</td><td>PT매출왕제로코치 (기업회원 · 세금계산서 발행)</td></tr>
+        <tr><td style="color:var(--muted)">응답 시간</td><td>평균 3시간 이내 · 24시간 연락 가능</td></tr>
+        <tr><td style="color:var(--muted)">좋아요</td><td>53개</td></tr>
+      </table>
+    </div>
+
+    <!-- 콘텐츠 구성 -->
+    <div class="card">
+      <div class="card-t"><div class="dot" style="background:var(--cyan)"></div>전자책 목차 구성</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="background:var(--bg3);border-radius:8px;padding:10px 12px;border-left:3px solid var(--orange)">
+          <div style="font-size:11px;color:var(--muted)">INTRO</div>
+          <div style="font-size:13px;font-weight:600">매출 못하는 근본 원인 — '경우의 수'가 없다</div>
+        </div>
+        <div style="background:var(--bg3);border-radius:8px;padding:10px 12px;border-left:3px solid var(--blue)">
+          <div style="font-size:11px;color:var(--muted)">1장</div>
+          <div style="font-size:13px;font-weight:600">신규 OT 등록률 80% 급상승 치트키 + 마인드셋</div>
+        </div>
+        <div style="background:var(--bg3);border-radius:8px;padding:10px 12px;border-left:3px solid var(--green)">
+          <div style="font-size:11px;color:var(--muted)">2장</div>
+          <div style="font-size:13px;font-weight:600">월 1건 이상 소개 등록 유입 비밀 (씨앗 뿌리기)</div>
+        </div>
+        <div style="background:var(--bg3);border-radius:8px;padding:10px 12px;border-left:3px solid var(--cyan)">
+          <div style="font-size:11px;color:var(--muted)">3장</div>
+          <div style="font-size:13px;font-weight:600">AI SNS마케팅으로 워크인 신규 월 1건+ 유입</div>
+        </div>
+        <div style="background:var(--bg3);border-radius:8px;padding:10px 12px;border-left:3px solid var(--pink)">
+          <div style="font-size:11px;color:var(--muted)">4장</div>
+          <div style="font-size:13px;font-weight:600">후킹 키워드로 OT 산더미 만드는 치트키</div>
+        </div>
+        <div style="background:var(--bg3);border-radius:8px;padding:10px 12px;border-left:3px solid var(--yellow)">
+          <div style="font-size:11px;color:var(--muted)">5장</div>
+          <div style="font-size:13px;font-weight:600">재등록 90% 유지 — 명분 셋팅 + 시각화 전략</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 유입 경로 & 구매자 특성 -->
+  <div class="grid2">
+    <div class="card">
+      <div class="card-t"><div class="dot" style="background:var(--pink)"></div>주요 유입 경로 (리뷰 분석 기반)</div>
+      <div class="chart-wrap">
+        <canvas id="inflowChart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-t"><div class="dot" style="background:var(--green)"></div>구매자 특성 분석</div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
+        <div class="insight blue"><strong>🎯 주 타겟</strong> — 매출 스트레스를 겪는 현직 피트니스 트레이너. 특히 초보~중급(경력 1~3년) 비중 높음. 구매자 70% 이상이 월 매출 500만원 이하.</div>
+        <div class="insight orange"><strong>📱 유입 채널</strong> — 인스타그램이 압도적 1위. "인스타로 알게 됐다", "광고 떠서 봤다", "FC팀장님 영상 공유" 등 SNS 바이럴이 핵심.</div>
+        <div class="insight green"><strong>💡 구매 동기</strong> — OT 등록률·재등록률·신규 유입에 대한 불안감. 월말·월초 매출 스트레스가 주요 트리거.</div>
+        <div class="insight red"><strong>⚠️ 구매 장벽</strong> — "강의팔이 아닐까?", "흔한 전자책 아닐까?" 등 의심·신뢰 부족이 전환 저해 요인.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 경쟁력 레이더 -->
+  <div class="card">
+    <div class="card-t"><div class="dot" style="background:var(--blue)"></div>상품 경쟁력 종합 평가</div>
+    <div style="display:grid;grid-template-columns:260px 1fr;gap:24px;align-items:center">
+      <div class="chart-wrap"><canvas id="radarChart"></canvas></div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div class="insight green"><strong>💪 강점</strong> — 4.88 고평점, 434건 거래, 98% 만족도. 실전 적용 가능한 콘텐츠로 강한 신뢰 기반. 인스타 SNS 연동 유입 구조가 잘 작동 중.</div>
+        <div class="insight red"><strong>⚠️ 약점</strong> — 단일 가격(39,000원) 구조로 업셀 없음. 1점 리뷰 "내용이 없다" 지적 존재. SNS 집중 의존(다른 채널 미활용). 미리보기 한계.</div>
+        <div class="insight orange"><strong>🚀 기회</strong> — 피트니스 트레이너 증가 추세. 프리미엄 패키지/코칭 상품 출시 여지. 유튜브 쇼츠 교차 업로드로 노출 확대 가능.</div>
+        <div class="insight blue"><strong>🛡️ 위협</strong> — 유사 전자책 경쟁 증가. 크몽 알고리즘 변화. 콘텐츠 포화 시장에서 차별화 지속 필요.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE 2 · 리뷰 분석
+══════════════════════════════════════ -->
+<div id="p2" class="page">
+  <div class="sec-h">💬 리뷰 심층 분석 <span class="badge">219건 · 4.88점</span></div>
+
+  <div class="grid4">
+    <div class="kpi" style="border-top:3px solid var(--green)">
+      <div class="v" style="color:var(--green)">218건</div>
+      <div class="l">5점 리뷰 (99.5%)</div>
+    </div>
+    <div class="kpi" style="border-top:3px solid var(--red)">
+      <div class="v" style="color:var(--red)">1건</div>
+      <div class="l">1점 리뷰 (0.5%)</div>
+    </div>
+    <div class="kpi" style="border-top:3px solid var(--blue)">
+      <div class="v" style="color:var(--blue)">전문가Pick</div>
+      <div class="l">우수 리뷰 획득</div>
+    </div>
+    <div class="kpi" style="border-top:3px solid var(--pink)">
+      <div class="v" style="color:var(--pink)">인스타</div>
+      <div class="l">주요 유입 채널 1위</div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <!-- 긍정 키워드 -->
+    <div class="card">
+      <div class="card-t"><div class="dot" style="background:var(--green)"></div>긍정 리뷰 핵심 키워드</div>
+      <div class="chart-wrap-sm"><canvas id="posKeyChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-t"><div class="dot" style="background:var(--red)"></div>개선 필요 시그널</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">
+        <div class="insight red"><strong>⚠️ 신뢰 장벽</strong> — "강의팔이 아닐까?", "흔한 전자책 아닐까?", "속는 마음으로 구매" 표현이 여러 리뷰에 등장. 구매 전 의심이 전환률 저해.</div>
+        <div class="insight red"><strong>⚠️ 1점 리뷰 내용</strong> — "내용이 너무 없다", "알맹이가 빠져있다", "2만원짜리 책보다 내용이 없다". 콘텐츠 볼륨·구체성 보강 필요.</div>
+        <div class="insight orange"><strong>💡 적용 어려움</strong> — "처음에 적용하기 어색했다"는 표현 다수. 실전 적용 가이드 또는 영상 튜토리얼 추가 필요.</div>
+        <div class="insight blue"><strong>📋 타겟 미스매치</strong> — "초보보다 1~2년 경력자에게 더 도움"이라는 리뷰 존재. 타겟별 맞춤 안내 필요.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 실제 리뷰 카드 -->
+  <div class="card">
+    <div class="card-t"><div class="dot" style="background:var(--yellow)"></div>대표 리뷰 모음</div>
+    <div class="grid2">
+      <div>
+        <div class="review-item">
+          <div class="review-header"><span class="stars">★★★★★</span><span style="font-size:12px;font-weight:700">눈치*****</span><span class="review-date">2026-03-24 · 전문가Pick</span></div>
+          <div class="review-text">"인스타로 알게 되어서 구매했습니다. 막연하게 나마 알고 있던 내용들, 전혀 인지하지 못했던 내용들, 여기 글에서 선보이는 현장에서 키우신 감각까지. 이제는 머리속이 정리되면서 이렇게 하면 되겠다는 확실한 기준이 잡힙니다! 무조건 추천"</div>
+          <span class="review-tag rt-green">✓ 인스타 유입</span>
+          <span class="review-tag rt-green" style="margin-left:4px">✓ 즉시 적용</span>
+        </div>
+        <div class="review-item">
+          <div class="review-header"><span class="stars">★★★★★</span><span style="font-size:12px;font-weight:700">파란*****</span><span class="review-date">2026-03-30</span></div>
+          <div class="review-text">"OT 배정 안 되면 환경 탓, 남 탓만 하기 바빴죠. 제로코치님 전자책 읽고 나서 매출은 운이나 말빨이 아니라 '경우의 수'를 극대화하는 철저한 공식에 달렸다는 걸 깨달았습니다. OT 2회차 시각화 관리파일, 세일즈북 활용법은 내일 당장 써먹겠다고 다짐했습니다."</div>
+          <span class="review-tag rt-green">✓ 마인드셋 전환</span>
+          <span class="review-tag rt-blue" style="margin-left:4px">★ 즉시 실행 의지</span>
+        </div>
+        <div class="review-item">
+          <div class="review-header"><span class="stars">★★★★★</span><span style="font-size:12px;font-weight:700">파인애플****</span><span class="review-date">2026-03-30</span></div>
+          <div class="review-text">"매달 월말마다 매출 스트레스에 시달리던 평범한 트레이너였습니다. 특히 OT 2회차 시각화 관리파일로 회원 신뢰 얻는 법, 세일즈북으로 거절 핑계 미리 차단하는 스킬은 당장 출근해서 써먹어봐야겠다고 다짐했습니다."</div>
+          <span class="review-tag rt-green">✓ 번아웃 탈출</span>
+        </div>
+      </div>
+      <div>
+        <div class="review-item">
+          <div class="review-header"><span class="stars">★★★★★</span><span style="font-size:12px;font-weight:700">울고*****</span><span class="review-date">2026-04-01</span></div>
+          <div class="review-text">"이 책을 보기 전에 사실 의심을 했어요. 다른 사람들과 같이 강의팔이가 아닌지. 읽고 나니 실무현장에서 바로 적용 가능한 알짜배기들이 들어있더라구요. OT·재등록·회원님과의 대화들이 이 책으로 90%는 해결 가능할 것 같아요. 지금 리뷰 후기 보시면서 고민하는 분들, 주저하지 마시고 투자하세요!"</div>
+          <span class="review-tag rt-blue">★ 의심→확신 전환</span>
+          <span class="review-tag rt-green" style="margin-left:4px">✓ 추천 의향</span>
+        </div>
+        <div class="review-item">
+          <div class="review-header"><span class="stars">★★★★★</span><span style="font-size:12px;font-weight:700">묵직*****</span><span class="review-date">2026-03-30</span></div>
+          <div class="review-text">"소위 1인분은 하는 트레이너인데, 읽어보니 80%는 이미 하고 있던 내용이었어요. 아 내가 방향은 잘 잡고 있었구나 확인됐고, OT 신뢰 시각화 자료·재등록 명분 만들기·소개 리뷰로 경우의 수 늘리는 방식이 특히 좋았습니다. 초보보다 1~2년 해본 트레이너에게 더 도움 될 것 같습니다."</div>
+          <span class="review-tag rt-blue">★ 재확인·검증</span>
+        </div>
+        <div class="review-item bad">
+          <div class="review-header"><span class="stars" style="color:var(--red)">★☆☆☆☆</span><span style="font-size:12px;font-weight:700">느릿*****</span><span class="review-date">리뷰 대응 필요</span></div>
+          <div class="review-text">"전자책 자체는 내용이 너무 없습니다. 정작 세일즈 방식·순서에는 알맹이가 빠져 있고, 인스타 세팅 내용은 한 장도 안 되는 분량입니다."</div>
+          <span class="review-tag rt-red">⚠️ 콘텐츠 볼륨 지적</span>
+          <span class="review-tag rt-red" style="margin-left:4px">⚠️ 즉시 답변 필요</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE 3 · 판매율 향상 계획
+══════════════════════════════════════ -->
+<div id="p3" class="page">
+  <div class="sec-h">🚀 판매율 향상 전략 계획서 <span class="badge">7가지 핵심 전략</span></div>
+
+  <!-- 예상 효과 KPI -->
+  <div class="grid4" style="margin-bottom:20px">
+    <div class="kpi" style="border-top:3px solid var(--orange)">
+      <div class="v" style="color:var(--orange)">+30~50%</div>
+      <div class="l">전환율 목표 증가</div>
+      <div class="s" style="color:var(--muted)">3개월 내 목표</div>
+    </div>
+    <div class="kpi" style="border-top:3px solid var(--green)">
+      <div class="v" style="color:var(--green)">300건→600건</div>
+      <div class="l">월 판매 목표 (리뷰→구매)</div>
+      <div class="s" style="color:var(--muted)">6개월 내 목표</div>
+    </div>
+    <div class="kpi" style="border-top:3px solid var(--blue)">
+      <div class="v" style="color:var(--blue)">2~3배</div>
+      <div class="l">매출 목표 확대</div>
+      <div class="s" style="color:var(--muted)">상품 라인업 확장 시</div>
+    </div>
+    <div class="kpi" style="border-top:3px solid var(--pink)">
+      <div class="v" style="color:var(--pink)">350건+</div>
+      <div class="l">리뷰 목표 (현재 219건)</div>
+      <div class="s" style="color:var(--muted)">신뢰도 상승 목표</div>
+    </div>
+  </div>
+
+  <!-- 전략 목록 -->
+  <div class="card">
+    <div class="card-t"><div class="dot" style="background:var(--red)"></div>즉시 실행 — HIGH 우선순위</div>
+
+    <div class="strategy-item" style="border-left-color:var(--red)">
+      <div class="s-num" style="background:#ef444422;color:var(--red)">01</div>
+      <div class="s-body">
+        <div class="s-title">🛡️ 1점 리뷰 즉시 공개 답변 작성</div>
+        <div class="s-desc">현재 1점 리뷰("내용이 없다")에 아무 답변이 없는 상태. 다른 잠재 구매자들이 이 리뷰를 보고 이탈할 가능성 높음. 정중하고 구체적인 공개 답변으로 신뢰를 회복하고, 해당 구매자에게 1:1 추가 지원 제안. → "안녕하세요. 소중한 피드백 감사합니다. 부족함을 느끼셨다면 정말 죄송합니다. 후기 혜택으로 제공되는 케이스별 영상과 세일즈북이 더 구체적인 내용을 담고 있으니 DM 주시면 별도 지원 드리겠습니다."</div>
+        <div style="display:flex;gap:6px;margin-top:8px">
+          <span class="s-expect pri-h">🔴 HIGH 긴급</span>
+          <span class="s-expect" style="background:#6366f120;color:var(--blue);border:1px solid #6366f130">소요 시간: 30분</span>
+          <span class="s-expect" style="background:#10b98120;color:var(--green);border:1px solid #10b98130">효과: 전환율 즉시 개선</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="strategy-item" style="border-left-color:var(--red)">
+      <div class="s-num" style="background:#ef444422;color:var(--red)">02</div>
+      <div class="s-body">
+        <div class="s-title">💡 상세 페이지 '신뢰 장벽 해소' 섹션 추가</div>
+        <div class="s-desc">리뷰 분석 결과 구매자 상당수가 "의심했다가 구매"한 패턴이 뚜렷함. 상세 페이지 초반부에 "이런 의심 드시죠?" 섹션을 추가해 선제적으로 신뢰를 구축. 실제 구매자 성과 수치(전/후 매출 비교 스크린샷), "구매자 70% 이상 3개월 내 2~3배 성장" 등의 구체적 데이터를 전면에 배치. 미리보기 페이지 수를 현재보다 확대해 콘텐츠 품질을 직접 체감하게 유도.</div>
+        <div style="display:flex;gap:6px;margin-top:8px">
+          <span class="s-expect pri-h">🔴 HIGH</span>
+          <span class="s-expect" style="background:#6366f120;color:var(--blue);border:1px solid #6366f130">소요: 2~3시간</span>
+          <span class="s-expect" style="background:#10b98120;color:var(--green);border:1px solid #10b98130">효과: 전환율 +15~25% 예상</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="strategy-item" style="border-left-color:var(--red)">
+      <div class="s-num" style="background:#ef444422;color:var(--red)">03</div>
+      <div class="s-body">
+        <div class="s-title">⭐ 후기 혜택을 상세 페이지 상단에 대형 배너로 노출</div>
+        <div class="s-desc">현재 "후기 작성 시 세일즈북·관리파일·오픈채팅방 제공"이 FAQ 섹션에 묻혀 있음. 이 혜택을 구매 결정 전에 눈에 잘 띄도록 상단 배너로 이동. → 구매→리뷰→혜택→재구매 선순환 구조 강화. 219건의 리뷰가 계속 쌓일수록 크몽 검색 노출 우선순위가 올라가는 알고리즘 효과도 있음.</div>
+        <div style="display:flex;gap:6px;margin-top:8px">
+          <span class="s-expect pri-h">🔴 HIGH</span>
+          <span class="s-expect" style="background:#6366f120;color:var(--blue);border:1px solid #6366f130">소요: 1시간</span>
+          <span class="s-expect" style="background:#10b98120;color:var(--green);border:1px solid #10b98130">효과: 리뷰 수 +30% 목표</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-t"><div class="dot" style="background:var(--yellow)"></div>단기 실행 — MID 우선순위</div>
+
+    <div class="strategy-item" style="border-left-color:var(--yellow)">
+      <div class="s-num" style="background:#f59e0b22;color:var(--yellow)">04</div>
+      <div class="s-body">
+        <div class="s-title">💎 프리미엄 패키지 상품 신규 출시</div>
+        <div class="s-desc">현재 39,000원 단일 상품이 유일. 업셀(Upsell) 구조가 없어 객단가 성장에 한계. 3단계 상품 라인업 구성 제안:<br>
+        ① 기본 전자책 — 39,000원 (현행 유지)<br>
+        ② 전자책 + 1:1 세일즈 진단 코칭 1회 — 99,000원<br>
+        ③ VIP 코칭 패키지 (전자책 + 월 4회 코칭 + 커뮤니티 평생 이용) — 290,000원<br>
+        → 기존 구매자 업그레이드 유도 + 신규 고가 패키지로 매출 2~3배 확대 가능</div>
+        <div style="display:flex;gap:6px;margin-top:8px">
+          <span class="s-expect pri-m">🟡 MID</span>
+          <span class="s-expect" style="background:#6366f120;color:var(--blue);border:1px solid #6366f130">소요: 1~2주</span>
+          <span class="s-expect" style="background:#10b98120;color:var(--green);border:1px solid #10b98130">효과: 매출 2~3배 잠재</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="strategy-item" style="border-left-color:var(--yellow)">
+      <div class="s-num" style="background:#f59e0b22;color:var(--yellow)">05</div>
+      <div class="s-body">
+        <div class="s-title">📱 인스타그램 → 크몽 광고 퍼널 최적화</div>
+        <div class="s-desc">리뷰의 40% 이상이 "인스타로 알게 됐다"고 언급. 현재 인스타→크몽 직접 링크 구조인데, 중간에 단독 랜딩 페이지를 만들어 구매 전환율을 높이는 방식 추천. 리타겟팅 광고(페이지 방문 후 이탈자 대상)와 영상 광고(실제 성과 후기 영상 활용)를 추가 세팅. 유튜브 쇼츠/릴스 교차 업로드로 추가 노출 채널 확보.</div>
+        <div style="display:flex;gap:6px;margin-top:8px">
+          <span class="s-expect pri-m">🟡 MID</span>
+          <span class="s-expect" style="background:#6366f120;color:var(--blue);border:1px solid #6366f130">소요: 1주</span>
+          <span class="s-expect" style="background:#10b98120;color:var(--green);border:1px solid #10b98130">효과: 신규 유입 +30%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-t"><div class="dot" style="background:var(--green)"></div>중장기 실행 — LOW (효과 누적형)</div>
+
+    <div class="strategy-item" style="border-left-color:var(--green)">
+      <div class="s-num" style="background:#10b98122;color:var(--green)">06</div>
+      <div class="s-body">
+        <div class="s-title">🎬 구매자 성과 영상 후기 콘텐츠화</div>
+        <div class="s-desc">텍스트 리뷰를 영상으로 전환. 실제 구매자 인터뷰 영상(Before→After 매출 변화)을 인스타 릴스/유튜브 쇼츠로 제작해 상세 페이지 내 임베드 및 SNS 동시 배포. 영상 후기는 텍스트 리뷰 대비 신뢰도 5배 이상 높음(마케팅 리서치 기준). 오픈채팅방 커뮤니티 성과 공유 사례를 콘텐츠로 재활용.</div>
+        <div style="display:flex;gap:6px;margin-top:8px">
+          <span class="s-expect pri-l">🟢 LOW</span>
+          <span class="s-expect" style="background:#6366f120;color:var(--blue);border:1px solid #6366f130">소요: 지속</span>
+          <span class="s-expect" style="background:#10b98120;color:var(--green);border:1px solid #10b98130">효과: 장기 신뢰 구축</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="strategy-item" style="border-left-color:var(--green)">
+      <div class="s-num" style="background:#10b98122;color:var(--green)">07</div>
+      <div class="s-body">
+        <div class="s-title">📊 크몽 SEO 키워드 최적화 + A/B 테스트</div>
+        <div class="s-desc">현재 카테고리: "전자책 > 학습·교육 > 기타" → "기타"를 더 구체적 카테고리로 변경 검토. 제목 내 검색 키워드 강화: "PT 매출", "트레이너 세일즈", "퍼스널트레이너 수입 올리는 법" 등 고빈도 검색어 반영. 썸네일 이미지 A/B 테스트(현재 어두운 배경 vs. 밝은 배경 비교). 상품 설명 첫 3줄에 핵심 혜택 키워드 배치로 검색 노출 개선.</div>
+        <div style="display:flex;gap:6px;margin-top:8px">
+          <span class="s-expect pri-l">🟢 LOW</span>
+          <span class="s-expect" style="background:#6366f120;color:var(--blue);border:1px solid #6366f130">소요: 2~3시간</span>
+          <span class="s-expect" style="background:#10b98120;color:var(--green);border:1px solid #10b98130">효과: 자연 검색 유입 +20%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE 4 · 실행 로드맵
+══════════════════════════════════════ -->
+<div id="p4" class="page">
+  <div class="sec-h">📅 4주 실행 로드맵 <span class="badge">2026년 4월</span></div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-t"><div class="dot" style="background:var(--orange)"></div>월별 목표 KPI</div>
+      <table>
+        <thead><tr><th>지표</th><th>현재</th><th>4월 말 목표</th><th>6월 말 목표</th></tr></thead>
+        <tbody>
+          <tr><td>리뷰 수</td><td style="color:var(--muted)">219건</td><td style="color:var(--yellow)">270건</td><td style="color:var(--green)">350건+</td></tr>
+          <tr><td>평균 평점</td><td style="color:var(--muted)">4.88</td><td style="color:var(--yellow)">4.9 유지</td><td style="color:var(--green)">4.9 유지</td></tr>
+          <tr><td>총 거래 건수</td><td style="color:var(--muted)">434건</td><td style="color:var(--yellow)">550건</td><td style="color:var(--green)">800건+</td></tr>
+          <tr><td>상품 라인업</td><td style="color:var(--muted)">1개</td><td style="color:var(--yellow)">2개</td><td style="color:var(--green)">3개</td></tr>
+          <tr><td>월 매출 추정</td><td style="color:var(--muted)">약 170만</td><td style="color:var(--yellow)">약 250만</td><td style="color:var(--green)">약 500만+</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-t"><div class="dot" style="background:var(--cyan)"></div>예상 매출 성장 시뮬레이션</div>
+      <div class="chart-wrap"><canvas id="growthChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- 타임라인 -->
+  <div class="card">
+    <div class="card-t"><div class="dot" style="background:var(--blue)"></div>주차별 실행 계획</div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot now"></div>
+        <div class="tl-week">🔥 Week 1 — 4월 1~7일 (즉시 시작)</div>
+        <div class="tl-tasks">
+          <div class="tl-task"><strong>① 1점 리뷰 공개 답변 작성</strong> — 정중하고 구체적인 답변으로 잠재 구매자 이탈 방지<div class="effect">→ 기대 효과: 전환율 즉시 개선, 신뢰도 회복</div></div>
+          <div class="tl-task"><strong>② 상세 페이지 '의심 해소' 섹션 추가</strong> — Before/After 실적 스크린샷, 구체적 성과 수치 배치<div class="effect">→ 기대 효과: 구매 전환율 +15~25%</div></div>
+          <div class="tl-task"><strong>③ 후기 혜택 배너 상단 이동</strong> — 구매 결정 전 혜택 인지율 향상<div class="effect">→ 기대 효과: 리뷰 작성률 +30%</div></div>
+          <div class="tl-task"><strong>④ 미리보기 페이지 수 확대 요청</strong> — 현재보다 10페이지 이상 추가 공개 검토<div class="effect">→ 기대 효과: 콘텐츠 품질 직접 체감 → 구매 확신</div></div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-week">📦 Week 2 — 4월 8~14일 (상품 전략)</div>
+        <div class="tl-tasks">
+          <div class="tl-task"><strong>① 프리미엄 패키지 기획서 작성</strong> — 99,000원 / 290,000원 2개 패키지 설계<div class="effect">→ 기대 효과: 객단가 2.5~7.4배 증가 잠재</div></div>
+          <div class="tl-task"><strong>② 인스타 리타겟팅 광고 세팅</strong> — 크몽 페이지 방문 후 이탈자 대상 광고 설정<div class="effect">→ 기대 효과: 이탈 구매자 20~30% 재유입</div></div>
+          <div class="tl-task"><strong>③ 구매 후 자동 DM 템플릿 작성</strong> — 후기 작성 독려 + 혜택 안내 자동화<div class="effect">→ 기대 효과: 리뷰 전환율 +20%</div></div>
+          <div class="tl-task"><strong>④ 유튜브 쇼츠 업로드 시작</strong> — 기존 인스타 릴스 콘텐츠 교차 업로드<div class="effect">→ 기대 효과: 추가 노출 채널 확보</div></div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-week">🚀 Week 3 — 4월 15~21일 (신상품 출시)</div>
+        <div class="tl-tasks">
+          <div class="tl-task"><strong>① 프리미엄 코칭 패키지 크몽 등록</strong> — 99,000원 + 290,000원 상품 등록<div class="effect">→ 기대 효과: 월 매출 구조 다변화</div></div>
+          <div class="tl-task"><strong>② 구매자 성과 영상 후기 1편 제작</strong> — 실제 구매자 인터뷰 or 성과 스크린샷 영상<div class="effect">→ 기대 효과: 신뢰도 대폭 상승</div></div>
+          <div class="tl-task"><strong>③ 크몽 키워드 SEO 최적화</strong> — 제목·설명·태그 키워드 재정비<div class="effect">→ 기대 효과: 자연 검색 유입 +20%</div></div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-week">📊 Week 4 — 4월 22~30일 (성과 분석)</div>
+        <div class="tl-tasks">
+          <div class="tl-task"><strong>① 4월 성과 KPI 점검</strong> — 리뷰 수, 거래 건수, 전환율, 매출 측정<div class="effect">→ 목표: 리뷰 270건, 거래 550건 달성 체크</div></div>
+          <div class="tl-task"><strong>② A/B 테스트 결과 분석</strong> — 썸네일·상세 페이지 변경 효과 측정<div class="effect">→ 우수 버전으로 최종 확정</div></div>
+          <div class="tl-task"><strong>③ 5월 전략 수립</strong> — 결과 기반으로 다음 달 광고 예산·콘텐츠 계획 수립<div class="effect">→ 지속 성장 루틴 구축</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE 5 · 업무 대시보드
+══════════════════════════════════════ -->
+<div id="p5" class="page">
+  <div class="sec-h">✅ 실행 업무 대시보드 <span class="badge" id="cnt-badge">로딩 중...</span></div>
+
+  <div class="grid2">
+    <!-- 할 일 -->
+    <div class="card" style="grid-column:span 1">
+      <div class="card-t"><div class="dot" style="background:var(--orange)"></div>오늘 할 일 — 판매율 향상 액션</div>
+      <div class="todo-add">
+        <input type="text" id="ti" placeholder="새 업무 입력 후 Enter..." onkeydown="if(event.key==='Enter')add()">
+        <select class="sel2" id="tp">
+          <option value="h">🔴 긴급</option>
+          <option value="m" selected>🟡 중요</option>
+          <option value="l">🟢 보통</option>
+        </select>
+        <button class="add-btn" onclick="add()">+ 추가</button>
+      </div>
+      <div class="tlist" id="tl"></div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:18px">
+      <!-- 전략 진행률 -->
+      <div class="card">
+        <div class="card-t"><div class="dot" style="background:var(--green)"></div>전략 실행 진행률</div>
+        <div class="prog-item">
+          <div class="prog-head"><span>🛡️ 1점 리뷰 답변</span><span style="color:var(--red)">0%</span></div>
+          <div class="prog-bg"><div class="prog-fill" style="width:0%;background:var(--red)"></div></div>
+          <div class="prog-sub">오늘 완료 목표</div>
+        </div>
+        <div class="prog-item">
+          <div class="prog-head"><span>💡 상세 페이지 개선</span><span style="color:var(--yellow)">10%</span></div>
+          <div class="prog-bg"><div class="prog-fill" style="width:10%;background:var(--yellow)"></div></div>
+          <div class="prog-sub">이번 주 완료 목표</div>
+        </div>
+        <div class="prog-item">
+          <div class="prog-head"><span>⭐ 후기 혜택 배너 이동</span><span style="color:var(--yellow)">0%</span></div>
+          <div class="prog-bg"><div class="prog-fill" style="width:0%;background:var(--cyan)"></div></div>
+          <div class="prog-sub">이번 주 완료 목표</div>
+        </div>
+        <div class="prog-item">
+          <div class="prog-head"><span>💎 프리미엄 패키지 기획</span><span style="color:var(--muted)">0%</span></div>
+          <div class="prog-bg"><div class="prog-fill" style="width:0%;background:var(--blue)"></div></div>
+          <div class="prog-sub">Week 2 목표</div>
+        </div>
+        <div class="prog-item">
+          <div class="prog-head"><span>📱 리타겟팅 광고 세팅</span><span style="color:var(--muted)">0%</span></div>
+          <div class="prog-bg"><div class="prog-fill" style="width:0%;background:var(--pink)"></div></div>
+          <div class="prog-sub">Week 2 목표</div>
+        </div>
+      </div>
+
+      <!-- 현재 KPI 현황 -->
+      <div class="card">
+        <div class="card-t"><div class="dot" style="background:var(--cyan)"></div>현재 상품 KPI 현황</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div style="background:var(--bg3);border-radius:8px;padding:10px;text-align:center">
+            <div style="font-size:20px;font-weight:800;color:var(--yellow)">4.88</div>
+            <div style="font-size:11px;color:var(--muted)">현재 평점</div>
+          </div>
+          <div style="background:var(--bg3);border-radius:8px;padding:10px;text-align:center">
+            <div style="font-size:20px;font-weight:800;color:var(--green)">219건</div>
+            <div style="font-size:11px;color:var(--muted)">누적 리뷰</div>
+          </div>
+          <div style="background:var(--bg3);border-radius:8px;padding:10px;text-align:center">
+            <div style="font-size:20px;font-weight:800;color:var(--blue)">434건</div>
+            <div style="font-size:11px;color:var(--muted)">총 거래</div>
+          </div>
+          <div style="background:var(--bg3);border-radius:8px;padding:10px;text-align:center">
+            <div style="font-size:20px;font-weight:800;color:var(--orange)">98%</div>
+            <div style="font-size:11px;color:var(--muted)">만족도</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 일정 -->
+  <div class="card">
+    <div class="card-t"><div class="dot" style="background:var(--pink)"></div>이번 주 실행 일정</div>
+    <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px">
+      <div style="text-align:center">
+        <div style="font-size:10px;color:var(--muted);padding:4px 0;font-weight:700">MON</div>
+        <div style="font-size:13px;font-weight:700;padding:4px 0;color:var(--muted)">3/30</div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:10px;color:var(--muted);padding:4px 0;font-weight:700">TUE</div>
+        <div style="font-size:13px;font-weight:700;padding:4px 0;color:var(--muted)">3/31</div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:10px;color:var(--text);padding:4px 0;font-weight:700">WED</div>
+        <div style="width:28px;height:28px;background:var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto;font-size:12px;font-weight:800;color:white">1</div>
+        <div style="margin-top:4px;background:var(--bg3);border-radius:6px;padding:4px 6px;font-size:9.5px;border-left:2px solid var(--red);text-align:left">🛡️ 리뷰<br>답변 작성</div>
+        <div style="margin-top:4px;background:var(--bg3);border-radius:6px;padding:4px 6px;font-size:9.5px;border-left:2px solid var(--orange);text-align:left">💡 상세페이지<br>개선 시작</div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:10px;color:var(--muted);padding:4px 0;font-weight:700">THU</div>
+        <div style="font-size:13px;font-weight:700;padding:4px 0">2</div>
+        <div style="margin-top:4px;background:var(--bg3);border-radius:6px;padding:4px 6px;font-size:9.5px;border-left:2px solid var(--yellow);text-align:left">⭐ 후기혜택<br>배너 이동</div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:10px;color:var(--muted);padding:4px 0;font-weight:700">FRI</div>
+        <div style="font-size:13px;font-weight:700;padding:4px 0">3</div>
+        <div style="margin-top:4px;background:var(--bg3);border-radius:6px;padding:4px 6px;font-size:9.5px;border-left:2px solid var(--green);text-align:left">✅ Week1<br>성과 점검</div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:10px;color:var(--muted);padding:4px 0;font-weight:700">SAT</div>
+        <div style="font-size:13px;font-weight:700;padding:4px 0;color:var(--muted)">4</div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:10px;color:var(--muted);padding:4px 0;font-weight:700">SUN</div>
+        <div style="font-size:13px;font-weight:700;padding:4px 0;color:var(--muted)">5</div>
+        <div style="margin-top:4px;background:var(--bg3);border-radius:6px;padding:4px 6px;font-size:9.5px;border-left:2px solid var(--blue);text-align:left">📦 Week2<br>계획 수립</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── 스크립트 ── -->
+<script>
+/* ── 탭 전환 ── */
+function show(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  btn.classList.add('on');
+}
+
+/* ── 유입 경로 도넛 ── */
+new Chart(document.getElementById('inflowChart'),{
+  type:'doughnut',
+  data:{
+    labels:['인스타그램 광고/콘텐츠','지인·FC팀장 공유','크몽 검색','기타'],
+    datasets:[{data:[65,20,10,5],backgroundColor:['#ec4899','#6366f1','#06b6d4','#6b7280'],borderWidth:0}]
+  },
+  options:{responsive:true,maintainAspectRatio:false,cutout:'65%',
+    plugins:{legend:{position:'bottom',labels:{color:'#6b7280',font:{size:11},boxWidth:12}}}}
+});
+
+/* ── 긍정 키워드 바 ── */
+new Chart(document.getElementById('posKeyChart'),{
+  type:'bar',
+  data:{
+    labels:['즉시 적용 가능','머리속 정리됨','무조건 추천','확실한 기준','번아웃 해결','90% 해결 가능'],
+    datasets:[{label:'언급 빈도',data:[48,35,28,22,18,15],
+      backgroundColor:'#6366f144',borderColor:'#6366f1',borderWidth:1.5,borderRadius:6}]
+  },
+  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{x:{grid:{color:'#252840'},ticks:{color:'#6b7280'}},y:{grid:{display:false},ticks:{color:'#a0a4c0',font:{size:11}}}}}
+});
+
+/* ── 레이더 ── */
+new Chart(document.getElementById('radarChart'),{
+  type:'radar',
+  data:{
+    labels:['콘텐츠 품질','신뢰도','가격 경쟁력','판매 전환율','상품 다양성','SEO 노출'],
+    datasets:[{label:'현재',data:[82,88,75,70,30,55],
+      backgroundColor:'rgba(249,115,22,0.15)',borderColor:'#f97316',pointBackgroundColor:'#f97316',pointRadius:4,borderWidth:2}]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    scales:{r:{min:0,max:100,ticks:{stepSize:25,font:{size:9},color:'#6b7280',backdropColor:'transparent'},
+      pointLabels:{color:'#a0a4c0',font:{size:10}},grid:{color:'#252840'},angleLines:{color:'#252840'}}},
+    plugins:{legend:{display:false}}}
+});
+
+/* ── 성장 시뮬레이션 ── */
+new Chart(document.getElementById('growthChart'),{
+  type:'line',
+  data:{
+    labels:['현재','4월','5월','6월','7월','8월'],
+    datasets:[
+      {label:'현행 유지',data:[170,185,195,210,220,230],borderColor:'#6b7280',borderDash:[4,3],pointRadius:3,tension:.4,borderWidth:1.5},
+      {label:'전략 실행',data:[170,250,340,500,650,800],borderColor:'#f97316',backgroundColor:'rgba(249,115,22,0.08)',fill:true,pointBackgroundColor:'#f97316',pointRadius:4,tension:.4,borderWidth:2.5}
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{color:'#6b7280',font:{size:11},boxWidth:12}}},
+    scales:{
+      y:{grid:{color:'#252840'},ticks:{color:'#6b7280',callback:v=>v+'만원'}},
+      x:{grid:{display:false},ticks:{color:'#6b7280'}}
+    }}
+});
+
+/* ── 할 일 ── */
+let todos=[
+  {id:1,text:'1점 리뷰 공개 답변 작성 (크몽 접속 → 리뷰 탭 → 답변하기)',p:'h',done:false},
+  {id:2,text:'상세 페이지 신뢰 섹션 추가 — "이런 의심 드시죠?" 문구 + 성과 수치',p:'h',done:false},
+  {id:3,text:'후기 작성 혜택 배너 상단으로 이동 요청',p:'h',done:false},
+  {id:4,text:'미리보기 페이지 추가 확대 검토',p:'m',done:false},
+  {id:5,text:'인스타 프로필 바이오 링크 멀티링크로 교체 (링크트리)',p:'m',done:false},
+  {id:6,text:'프리미엄 패키지 99,000원 상품 기획서 초안 작성',p:'m',done:false},
+  {id:7,text:'크몽 키워드 SEO 최적화 — 제목·설명 키워드 재검토',p:'l',done:false},
+];
+let nid=8;
+function render(){
+  const el=document.getElementById('tl');
+  const sorted=[...todos].sort((a,b)=>{const o={h:0,m:1,l:2};return o[a.p]-o[b.p];});
+  el.innerHTML=sorted.map(t=>`
+    <div class="titem ${t.done?'done':''}">
+      <input type="checkbox" class="cb" ${t.done?'checked':''} onchange="tog(${t.id})">
+      <span class="ttext">${t.text}</span>
+      <span class="ttag ${t.p==='h'?'pri-h':t.p==='m'?'pri-m':'pri-l'}">${t.p==='h'?'긴급':t.p==='m'?'중요':'보통'}</span>
+      <button class="del" onclick="del2(${t.id})">✕</button>
+    </div>`).join('');
+  const done=todos.filter(t=>t.done).length;
+  document.getElementById('cnt-badge').textContent=done+' / '+todos.length+' 완료';
+}
+function tog(id){const t=todos.find(x=>x.id===id);if(t)t.done=!t.done;render();}
+function del2(id){todos=todos.filter(x=>x.id!==id);render();}
+function add(){
+  const v=document.getElementById('ti').value.trim();
+  if(!v)return;
+  todos.unshift({id:nid++,text:v,p:document.getElementById('tp').value,done:false});
+  document.getElementById('ti').value='';
+  render();
+}
+render();
+</script>
+</body>
+</html>
