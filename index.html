@@ -161,6 +161,71 @@
     .devent.p { border-left-color:var(--pink); }
 
     .chart-wrap { height:190px; position:relative; }
+
+    /* ── 반응형: 태블릿 (768px 이하) ── */
+    @media (max-width: 768px) {
+      header { padding:14px 16px; }
+      header h1 { font-size:15px; }
+      .hdr-right { font-size:11px; }
+
+      .wrap { padding:14px 12px; grid-template-columns:1fr 1fr; gap:12px; }
+      .card.span3 { grid-column:span 2; }
+
+      .todo-add { flex-wrap:wrap; gap:6px; }
+      .todo-add input#ti { flex:1 1 100%; }
+      .todo-add .sel,
+      .todo-add input#to { flex:1; }
+      .add-btn { flex:0 0 auto; }
+
+      .weather-icon { font-size:40px; }
+      .weather-info .temp { font-size:28px; }
+
+      .week { gap:4px; }
+      .devent { font-size:9px; padding:3px 4px; }
+    }
+
+    /* ── 반응형: 모바일 (480px 이하) ── */
+    @media (max-width: 480px) {
+      header { padding:12px 14px; flex-wrap:wrap; gap:8px; }
+      header h1 { font-size:14px; }
+      .hdr-right { font-size:10px; }
+
+      .wrap { padding:10px 8px; grid-template-columns:1fr; gap:10px; }
+      .card.span2,
+      .card.span3 { grid-column:span 1; }
+      .card { padding:16px 14px; }
+
+      .todo-add { flex-wrap:wrap; gap:6px; }
+      .todo-add input#ti { flex:1 1 100%; }
+      .todo-add .sel { flex:1 1 45%; }
+      .todo-add input#to { flex:1 1 45%; }
+      .add-btn { flex:1 1 100%; text-align:center; padding:10px; }
+
+      .t-item { flex-wrap:wrap; gap:6px; padding:10px; }
+      .t-text { flex:1 1 calc(100% - 30px); font-size:13px; }
+      .t-owner { font-size:10px; }
+
+      .weather-main { gap:12px; }
+      .weather-icon { font-size:36px; }
+      .weather-info .temp { font-size:26px; }
+      .weather-info .desc { font-size:12px; }
+
+      .news-item { flex-direction:column; gap:6px; }
+      .news-title { font-size:13px; }
+      .news-desc { font-size:11px; }
+
+      .week { grid-template-columns:repeat(7,1fr); gap:2px; }
+      .dlbl { font-size:9px; }
+      .dnum { font-size:11px; }
+      .dnum.today { width:22px; height:22px; font-size:10px; }
+      .devent { font-size:8px; padding:2px 3px; }
+
+      .s-bar { width:50px; }
+      .s-amt { font-size:11px; width:50px; }
+      .s-name { font-size:12px; }
+
+      .prog-item .ph2 { font-size:12px; }
+    }
   </style>
 </head>
 <body>
