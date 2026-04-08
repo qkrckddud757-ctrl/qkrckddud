@@ -161,6 +161,22 @@
     .devent.p { border-left-color:var(--pink); }
 
     .chart-wrap { height:190px; position:relative; }
+
+    /* 링크 카드 */
+    .link-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .link-btn {
+      display:flex; align-items:center; gap:10px; padding:14px;
+      background:var(--border); border:1px solid var(--border); border-radius:8px;
+      cursor:pointer; transition:all 0.3s;
+      text-decoration:none; color:inherit;
+    }
+    .link-btn:hover {
+      background:var(--blue); border-color:var(--blue); transform:translateY(-2px);
+    }
+    .link-btn-icon { font-size:24px; }
+    .link-btn-text { flex:1; }
+    .link-btn-title { font-weight:600; font-size:13px; }
+    .link-btn-desc { font-size:11px; color:var(--muted); margin-top:2px; }
   </style>
 </head>
 <body>
@@ -330,6 +346,27 @@
     <div class="sales-row"><div class="s-rank">3</div><div class="s-name">블루투스 스피커</div><div class="s-bar"><div class="s-fill" style="width:33%"></div></div><div class="s-amt">960만</div></div>
     <div class="sales-row"><div class="s-rank">4</div><div class="s-name">보조배터리</div><div class="s-bar"><div class="s-fill" style="width:31%"></div></div><div class="s-amt">903만</div></div>
     <div class="sales-row"><div class="s-rank">5</div><div class="s-name">에코백</div><div class="s-bar"><div class="s-fill" style="width:21%"></div></div><div class="s-amt">617만</div></div>
+  </div>
+
+  <!-- ── 제로코치 링크 ── -->
+  <div class="card span2">
+    <div class="card-t"><div class="dot" style="background:var(--pink)"></div>제로코치 채널</div>
+    <div class="link-grid">
+      <a href="https://kmong.com/gig/692436" target="_blank" class="link-btn">
+        <div class="link-btn-icon">📚</div>
+        <div class="link-btn-text">
+          <div class="link-btn-title">전자책 판매</div>
+          <div class="link-btn-desc">크몽 - 트레이너 월매출 자동화</div>
+        </div>
+      </a>
+      <a href="https://instagram.com/zerocoach7" target="_blank" class="link-btn">
+        <div class="link-btn-icon">📱</div>
+        <div class="link-btn-text">
+          <div class="link-btn-title">인스타그램</div>
+          <div class="link-btn-desc">@zerocoach7 팔로우</div>
+        </div>
+      </a>
+    </div>
   </div>
 
 </div>
