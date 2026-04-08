@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>김비서 아이콘 생성기</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      background: #1a1a2e;
+      color: #fff;
+    }
+    h1 { color: #6366f1; }
+    .container {
+      display: flex;
+      gap: 40px;
+      margin: 30px 0;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    canvas {
+      border: 2px solid #06b6d4;
+      border-radius: 8px;
+    }
+    .size-label {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #aaa;
+    }
+    button {
+      background: #6366f1;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 20px;
+    }
+    button:hover {
+      background: #4f46e5;
+    }
+    .info {
+      background: #2a2d3e;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 30px;
+      max-width: 600px;
+    }
+    .success {
+      color: #10b981;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎨 김비서 아이콘 생성기</h1>
+
+  <div class="container">
+    <div>
+      <canvas id="canvas192" width="192" height="192"></canvas>
+      <div class="size-label">192x192</div>
+    </div>
+    <div>
+      <canvas id="canvas512" width="512" height="512"></canvas>
+      <div class="size-label">512x512</div>
+    </div>
+  </div>
+
+  <button onclick="downloadAll()">📥 아이콘 다운로드</button>
+
+  <div class="info">
+    <h3>📋 다음 단계:</h3>
+    <ol>
+      <li>아래 버튼을 클릭해 아이콘 다운로드</li>
+      <li>다운로드된 파일을 프로젝트 폴더에 저장</li>
+      <li>GitHub에 푸시하면 PWA 완성!</li>
+    </ol>
+    <div class="success" id="status"></div>
+  </div>
+
+  <script>
+    // 아이콘 그리기 함수
+    function drawIcon(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext('2d');
+      const size = canvas.width;
+
+      // 배경색
+      ctx.fillStyle = '#1a1a2e';
+      ctx.fillRect(0, 0, size, size);
+
+      // 그라디언트 원
+      const gradient = ctx.createLinearGradient(0, 0, size, size);
+      gradient.addColorStop(0, '#6366f1');
+      gradient.addColorStop(1, '#06b6d4');
+
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(size / 2, size / 2, size * 0.35, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 텍스트 "김"
+      ctx.fillStyle = '#ffffff';
+      ctx.font = `bold ${size * 0.5}px Arial`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('김', size / 2, size / 2);
+    }
+
+    // 페이지 로드 시 아이콘 그리기
+    window.addEventListener('load', () => {
+      drawIcon('canvas192');
+      drawIcon('canvas512');
+    });
+
+    // 다운로드 함수
+    function downloadCanvas(canvasId, filename) {
+      const canvas = document.getElementById(canvasId);
+      const link = document.createElement('a');
+      link.href = canvas.toDataURL('image/png');
+      link.download = filename;
+      link.click();
+    }
+
+    // 전체 다운로드
+    function downloadAll() {
+      downloadCanvas('canvas192', 'icon-192x192.png');
+      setTimeout(() => {
+        downloadCanvas('canvas512', 'icon-512x512.png');
+      }, 500);
+
+      document.getElementById('status').innerText = '✅ 아이콘 다운로드 완료! 프로젝트 폴더에 저장하세요.';
+    }
+  </script>
+</body>
+</html>
