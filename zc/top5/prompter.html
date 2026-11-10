@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>대본 넘기기 — 스킬 Top5</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%;background:#000;color:#fff;font-family:Pretendard,sans-serif;word-break:keep-all;overflow:hidden;user-select:none}
+  #app{position:fixed;inset:0;display:flex;flex-direction:column;cursor:pointer}
+  #top{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;font-size:20px;font-weight:800;color:#8A8F9C}
+  #part{background:#CCFF00;color:#000;padding:6px 16px;border-radius:999px}
+  #main{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 6vw}
+  #line{font-size:clamp(38px,8vw,92px);font-weight:900;line-height:1.25;letter-spacing:-1.5px}
+  #line b{color:#CCFF00}
+  #hand{margin-top:4vh;font-size:clamp(20px,3.6vw,38px);font-weight:700;color:#FFB45E}
+  #next{padding:0 6vw 3vh;font-size:clamp(18px,2.6vw,28px);font-weight:600;color:#55595F;min-height:12vh}
+  #bar{height:8px;background:#1A1B1F}
+  #fill{height:100%;background:#CCFF00;width:0}
+  #help{position:fixed;left:0;right:0;bottom:16px;text-align:center;font-size:16px;color:#3E4148;pointer-events:none}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="top"><span id="part">훅</span><span id="cnt">1 / 24</span></div>
+  <div id="main">
+    <div id="line"></div>
+    <div id="hand"></div>
+  </div>
+  <div id="next"></div>
+  <div id="bar"><div id="fill"></div></div>
+</div>
+<div id="help">화면 오른쪽 누르기 = 다음 · 왼쪽 누르기 = 이전 (키보드는 스페이스 / ←)</div>
+<script src="script.js"></script>
+<script>
+  var S = window.SCRIPT, i = 0;
+  function show(){
+    var s = S[i];
+    document.getElementById('part').textContent = s.part;
+    document.getElementById('cnt').textContent = (i + 1) + ' / ' + S.length;
+    document.getElementById('line').innerHTML = s.line;
+    document.getElementById('hand').textContent = '✋ ' + s.hand;
+    document.getElementById('next').innerHTML = i + 1 < S.length ? '다음 → ' + S[i + 1].line.replace(/<br>/g, ' ') : '끝! 녹화 멈추세요';
+    document.getElementById('fill').style.width = ((i + 1) / S.length * 100) + '%';
+  }
+  function go(d){ i = Math.max(0, Math.min(S.length - 1, i + d)); show(); }
+  document.getElementById('app').addEventListener('click', function(e){ go(e.clientX < window.innerWidth * 0.35 ? -1 : 1); });
+  document.addEventListener('keydown', function(e){
+    if (e.key === ' ' || e.key === 'ArrowRight' || e.key === 'Enter' || e.key === 'PageDown') { e.preventDefault(); go(1); }
+    if (e.key === 'ArrowLeft' || e.key === 'Backspace' || e.key === 'PageUp') { e.preventDefault(); go(-1); }
+  });
+  show();
+</script>
+</body>
+</html>
